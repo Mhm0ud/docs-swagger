@@ -86,8 +86,6 @@ paths:
                 properties:
                   channel:
                     type: object
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
         '422':
           description: Status 422
           content:
@@ -1542,7 +1540,10 @@ paths:
       security:
         - bearerAuth: []
 servers:
-  - url: 'https://mp.knawat.io/api'
+  - description: Production Server
+    url: https://mp.knawat.io/api
+  - description: Sandbox
+    url: https://dev.mp.knawat.io/api
 components:
   responses:
     UnauthorizedErrorToken:
