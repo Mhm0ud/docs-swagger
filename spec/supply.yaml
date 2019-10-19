@@ -184,22 +184,22 @@ paths:
                       type: object
                       description:
                         [{
-                                    "line1" : "Halaskargazi Mahallesi, D10 KAT5",
-                                    "line2" : "Rumeli Cd. 35-37",
-                                    "post_code" : "34371",
-                                    "city" : "sisli",
-                                    "state" : "ISTANBUL",
-                                    "country" : "TURKEY"
-                                }]
+                          "line1" : "Halaskargazi Mahallesi, D10 KAT5",
+                          "line2" : "Rumeli Cd. 35-37",
+                          "post_code" : "34371",
+                          "city" : "sisli",
+                          "state" : "ISTANBUL",
+                          "country" : "TURKEY"
+                        }]
                     contacts:
                       type: array
                       description:
                         [{
                           "department" : "operations",
-                                    "name" : "John Doe",
-                                    "email" : "john.doe@examplestore.com.tr",
-                                    "phone" : "+90123454356"
-                                }]
+                          "name" : "John Doe",
+                          "email" : "john.doe@examplestore.com.tr",
+                          "phone" : "+90123454356"
+                        }]
                       items:
                         type: object
         required: true
@@ -230,21 +230,21 @@ paths:
                 response:
                   value:
                     {
-                        "supplier": {
-                            "_id": "ku1gBhsblZp5dbAh",
-                            "state": "review",
-                            "name": "Pasionwear",
-                            "url": "https://examplestore.com.tr",
-                            "currency": "TRY",
-                            "created_date": "2018-05-07T08:06:40.980Z",
-                            "updated_date": "2018-05-07T08:06:40.980Z",
-                            "contacts": [
-                                {
-                                    "email": "sales@examplestore.com.tr",
-                                    "phone": "+90215654356"
-                                }
-                            ]
-                        }
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "review",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -279,21 +279,21 @@ paths:
                 response:
                   value:
                     {
-                        "supplier": {
-                            "_id": "ku1gBhsblZp5dbAh",
-                            "state": "disabled",
-                            "name": "Pasionwear",
-                            "url": "https://examplestore.com.tr",
-                            "currency": "TRY",
-                            "created_date": "2018-05-07T08:06:40.980Z",
-                            "updated_date": "2018-05-07T08:06:40.980Z",
-                            "contacts": [
-                                {
-                                    "email": "sales@examplestore.com.tr",
-                                    "phone": "+90215654356"
-                                }
-                            ]
-                        }
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "disabled",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -356,21 +356,21 @@ paths:
                 response:
                   value:
                     {
-                        "supplier": {
-                            "_id": "ku1gBhsblZp5dbAh",
-                            "state": "disabled",
-                            "name": "Pasionwear",
-                            "url": "https://examplestore.com.tr",
-                            "currency": "TRY",
-                            "created_date": "2018-05-07T08:06:40.980Z",
-                            "updated_date": "2018-05-07T08:06:40.980Z",
-                            "contacts": [
-                                {
-                                    "email": "sales@examplestore.com.tr",
-                                    "phone": "+90215654356"
-                                }
-                            ]
-                        }
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "disabled",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -406,8 +406,8 @@ paths:
                 response:
                   value: 
                     {
-                        "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                        "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX"
+                      "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                      "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX"
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -472,10 +472,10 @@ paths:
           description: stock range
           example:
             {
-            stock : {
-            stock_from: 12,
-            stock_to: 50
-            }
+              stock : {
+                stock_from: 12,
+                stock_to: 50
+              }
             }
           schema:
             type: string
@@ -486,9 +486,9 @@ paths:
           example:
             { 
               price: {
-            price_from: 12,
-            price_to: 50
-            }
+                price_from: 12,
+                price_to: 50
+              }
             }
           schema:
             type: string
@@ -829,7 +829,7 @@ paths:
         required: true
         schema:
           type: number
-    x-restlet:
+x-restlet:
   sections:
     General: {}
     Authentication: {}
@@ -1076,10 +1076,10 @@ paths:
         | cancel | WH order canceled |
       section: Order management
 servers:
-# Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/HazemKhaled/knawat-mp/2.0.0
-  - url: 'https://suppliers.knawat.io/api'
+  - description: Production Server
+    url: https://suppliers.knawat.io/api
+  - description: Sandbox
+    url: https://dev.suppliers.knawat.io/api
 components:
   responses:
     UnauthorizedErrorToken:
@@ -1130,9 +1130,9 @@ components:
           type: object
       example:
         {
-            "errorCode": 404,
-            "errorMessage": "SKU(s) out of stock.",
-            "data": {}
+          "errorCode": 404,
+          "errorMessage": "SKU(s) out of stock.",
+          "data": {}
         }
       x-restlet:
         section: General
@@ -1346,26 +1346,26 @@ components:
                 "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg"
               ],
                "categories": [
-                        {
-                            "_id": 74962,
-                            "name": {
-                                "en": "Bags, Handbags & Cases",
-                                "ar": "حقائب وحقائب يد وحقائب صغيرة"
-                            },
-                            "parentId": 182059,
-                            "productsCount": 280,
-                            "treeNodeLevel": 4
-                        },
-                        {
-                            "_id": 182059,
-                            "name": {
-                                "en": "Vintage Accessories",
-                                "ar": "أكسسورات عتيقة"
-                            },
-                            "parentId": 175759,
-                            "productsCount": 282,
-                            "treeNodeLevel": 3
-                        }
+                  {
+                      "_id": 74962,
+                      "name": {
+                          "en": "Bags, Handbags & Cases",
+                          "ar": "حقائب وحقائب يد وحقائب صغيرة"
+                      },
+                      "parentId": 182059,
+                      "productsCount": 280,
+                      "treeNodeLevel": 4
+                  },
+                  {
+                      "_id": 182059,
+                      "name": {
+                          "en": "Vintage Accessories",
+                          "ar": "أكسسورات عتيقة"
+                      },
+                      "parentId": 175759,
+                      "productsCount": 282,
+                      "treeNodeLevel": 3
+                  }
               ],
               "attributes": [
                 {
@@ -1552,15 +1552,15 @@ components:
         id:
           type: number
       example:
-         {
-                            "_id": 11450,
-                            "name": {
-                                "en": "Clothing, Shoes & Accessories",
+        {
+          "_id": 11450,
+          "name": {
+              "en": "Clothing, Shoes & Accessories",
               "ar": "ملابس وأحذية وإكسسورات",
-                            },
-                            "productsCount": 0,
+            },
+          "productsCount": 0,
           "treeNodeLevel": 1,
-                        }
+        }
       x-restlet:
         section: Inventory management
     LanguagesObject:
@@ -1673,29 +1673,29 @@ components:
           description: Supplier can send here whatever he wants to our warehouse
       example:
         {
-            "id": 1001,
-            "po_status": "reserved",
-            "wh_status": "draft",
-            "created_date": "2018-01-19T12:00:00.000+3000",
+          "id": 1001,
+          "po_status": "reserved",
+          "wh_status": "draft",
+          "created_date": "2018-01-19T12:00:00.000+3000",
           "modified_date": "2018-01-19T12:00:00.000+3000",
           "shipping":
             {
-                "first_name": "Knawat",
-                "last_name": "LLC",
-                "company": "Knawat, LLC",
-                "address_1": "Our warehouse address",
-                "address_2": "",
-                "city": "example data",
-                "state": "Istanbul",
-                "postcode": "57555",
+              "first_name": "Knawat",
+              "last_name": "LLC",
+              "company": "Knawat, LLC",
+              "address_1": "Our warehouse address",
+              "address_2": "",
+              "city": "example data",
+              "state": "Istanbul",
+              "postcode": "57555",
               "country": "TR",
             },
           "items": [{
-                    "quantity": 2,
-                    "sku": "G6667AZ17SPBE137-46"
+            "quantity": 2,
+            "sku": "G6667AZ17SPBE137-46"
           }],
-            "shipping_carrier": "Example Company",
-            "tracking_number": "123455",
+          "shipping_carrier": "Example Company",
+          "tracking_number": "123455",
           "supplier_message": "",
         }
       x-restlet:
