@@ -15,7 +15,76 @@ info:
   description: >-
     From here you can add your suppliers, and register their products API base
     url and credentials.
+
+    ## Support and Chat
+      We are happy to receive you questions. click here to [chat with us](https://gitter.im/Knawat/Lobby).
+
+    ## Errors Handling
+      This API uses standard HTTP status codes to indicate the status of a
+      response.
+
+      There are two main categories of error responses. Each have a different
+      response payload structure.
+
+      * Simple errors
+      * Detailed errors
+
+      # Simple errors
+
+      | Name | Code | Description |
+      | -------- | -------- | -------- |
+      | Bad request     | 400     | The request was unacceptable     |
+      | Unauthorized     | 401     | The request has not been applied because it lacks valid authentication credentials for the target resource.     |
+      | Forbidden     | 403     | The server understood the request, but is refusing to fulfill it     |
+      | Not Found     | 404     | The server has not found anything matching the request URI     |
+      | Not acceptable     | 406     | The server is unable to return a response in the format that was requested by the client     |
+      | Unsupported Media Type     | 415     | The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method |
+      | Too many requests     | 429     | Too many requests hit the API too quickly |
+      | Server error     | 500     | A technical error occurred in Restlet Cloud |
+
+      # Detailed errors
+      | Name | Code | Description |
+      | -------- | -------- | -------- |
+      | Un-processable entity     | 422     | The server understands the content type of the request entity, and the syntax of the request entity is correct, but was unable to process the contained instructions. |
 tags:
+  - name: Inventory management
+    description: Updating your inventory, add products, check inventory levels.
+  - name: Order management
+    description: >-
+      Get orders, and update shipping status
+
+      ## Order Cancelation
+
+      Channels can cancel their orders before Knawat starts the international shipping process.
+
+      ## Order Return
+
+      We have to cases two return orders to suppliers:
+
+      1. In case of supplier send a wrong or broken item.
+
+      2. In case the channel canceled the order before shipping it outside
+      Turkey.
+
+      Suppliers need to pick the items again from Knawat warehouse next
+      working day, while they are delivering next day items, we also can ship
+      it directly to your warehouse.
+
+      ## Reservations
+
+      Knawat allows channels to reserve qty for maximum three working days
+      until they confirm orders with their customer. Knawat maintains orders
+      status according to the following table:
+
+      ## Statuses
+
+      | Status | What? |
+      | -------- | -------- |
+      | reserved | PO created, not confirmed yet, supplier need to book the qty |
+      | sent | PO orders, need to ship |
+      | purchase | PO delivered by the supplier, integrator need to change status to purchase |
+      | done | PO paid to supplier |
+      | canceled | PO canceled |
 paths:
   /token:
     post:
@@ -183,23 +252,27 @@ paths:
                     address:
                       type: object
                       description:
-                        [{
-                          "line1" : "Halaskargazi Mahallesi, D10 KAT5",
-                          "line2" : "Rumeli Cd. 35-37",
-                          "post_code" : "34371",
-                          "city" : "sisli",
-                          "state" : "ISTANBUL",
-                          "country" : "TURKEY"
-                        }]
+                        [
+                          {
+                            "line1": "Halaskargazi Mahallesi, D10 KAT5",
+                            "line2": "Rumeli Cd. 35-37",
+                            "post_code": "34371",
+                            "city": "sisli",
+                            "state": "ISTANBUL",
+                            "country": "TURKEY",
+                          },
+                        ]
                     contacts:
                       type: array
                       description:
-                        [{
-                          "department" : "operations",
-                          "name" : "John Doe",
-                          "email" : "john.doe@examplestore.com.tr",
-                          "phone" : "+90123454356"
-                        }]
+                        [
+                          {
+                            "department": "operations",
+                            "name": "John Doe",
+                            "email": "john.doe@examplestore.com.tr",
+                            "phone": "+90123454356",
+                          },
+                        ]
                       items:
                         type: object
         required: true
@@ -230,21 +303,23 @@ paths:
                 response:
                   value:
                     {
-                      "supplier": {
-                        "_id": "ku1gBhsblZp5dbAh",
-                        "state": "review",
-                        "name": "Pasionwear",
-                        "url": "https://examplestore.com.tr",
-                        "currency": "TRY",
-                        "created_date": "2018-05-07T08:06:40.980Z",
-                        "updated_date": "2018-05-07T08:06:40.980Z",
-                        "contacts": [
-                          {
-                            "email": "sales@examplestore.com.tr",
-                            "phone": "+90215654356"
-                          }
-                        ]
-                      }
+                      "supplier":
+                        {
+                          "_id": "ku1gBhsblZp5dbAh",
+                          "state": "review",
+                          "name": "Pasionwear",
+                          "url": "https://examplestore.com.tr",
+                          "currency": "TRY",
+                          "created_date": "2018-05-07T08:06:40.980Z",
+                          "updated_date": "2018-05-07T08:06:40.980Z",
+                          "contacts":
+                            [
+                              {
+                                "email": "sales@examplestore.com.tr",
+                                "phone": "+90215654356",
+                              },
+                            ],
+                        },
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -279,21 +354,23 @@ paths:
                 response:
                   value:
                     {
-                      "supplier": {
-                        "_id": "ku1gBhsblZp5dbAh",
-                        "state": "disabled",
-                        "name": "Pasionwear",
-                        "url": "https://examplestore.com.tr",
-                        "currency": "TRY",
-                        "created_date": "2018-05-07T08:06:40.980Z",
-                        "updated_date": "2018-05-07T08:06:40.980Z",
-                        "contacts": [
-                          {
-                            "email": "sales@examplestore.com.tr",
-                            "phone": "+90215654356"
-                          }
-                        ]
-                      }
+                      "supplier":
+                        {
+                          "_id": "ku1gBhsblZp5dbAh",
+                          "state": "disabled",
+                          "name": "Pasionwear",
+                          "url": "https://examplestore.com.tr",
+                          "currency": "TRY",
+                          "created_date": "2018-05-07T08:06:40.980Z",
+                          "updated_date": "2018-05-07T08:06:40.980Z",
+                          "contacts":
+                            [
+                              {
+                                "email": "sales@examplestore.com.tr",
+                                "phone": "+90215654356",
+                              },
+                            ],
+                        },
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -356,21 +433,23 @@ paths:
                 response:
                   value:
                     {
-                      "supplier": {
-                        "_id": "ku1gBhsblZp5dbAh",
-                        "state": "disabled",
-                        "name": "Pasionwear",
-                        "url": "https://examplestore.com.tr",
-                        "currency": "TRY",
-                        "created_date": "2018-05-07T08:06:40.980Z",
-                        "updated_date": "2018-05-07T08:06:40.980Z",
-                        "contacts": [
-                          {
-                            "email": "sales@examplestore.com.tr",
-                            "phone": "+90215654356"
-                          }
-                        ]
-                      }
+                      "supplier":
+                        {
+                          "_id": "ku1gBhsblZp5dbAh",
+                          "state": "disabled",
+                          "name": "Pasionwear",
+                          "url": "https://examplestore.com.tr",
+                          "currency": "TRY",
+                          "created_date": "2018-05-07T08:06:40.980Z",
+                          "updated_date": "2018-05-07T08:06:40.980Z",
+                          "contacts":
+                            [
+                              {
+                                "email": "sales@examplestore.com.tr",
+                                "phone": "+90215654356",
+                              },
+                            ],
+                        },
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -404,10 +483,10 @@ paths:
                 type: object
               examples:
                 response:
-                  value: 
+                  value:
                     {
                       "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                      "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX"
+                      "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX",
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
@@ -470,26 +549,14 @@ paths:
           in: query
           required: false
           description: stock range
-          example:
-            {
-              stock : {
-                stock_from: 12,
-                stock_to: 50
-              }
-            }
+          example: { stock: { stock_from: 12, stock_to: 50 } }
           schema:
             type: string
         - name: price
           in: query
           required: false
           description: price range
-          example:
-            { 
-              price: {
-                price_from: 12,
-                price_to: 50
-              }
-            }
+          example: { price: { price_from: 12, price_to: 50 } }
           schema:
             type: string
         - name: sort_by
@@ -534,8 +601,8 @@ paths:
                     type: number
                   products:
                     $ref: "#/components/schemas/Product"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
     post:
@@ -569,8 +636,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Product"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
       requestBody:
@@ -608,8 +675,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Product"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
       requestBody:
@@ -639,8 +706,8 @@ paths:
                 properties:
                   product:
                     $ref: "#/components/schemas/Product"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
     put:
@@ -651,8 +718,8 @@ paths:
       responses:
         "200":
           description: Status 200
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
       requestBody:
@@ -713,8 +780,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Category"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
   /orders:
@@ -747,8 +814,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Order"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
   "/orders/{id}":
@@ -778,8 +845,8 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Order"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
     put:
@@ -810,8 +877,8 @@ paths:
                 properties:
                   order:
                     $ref: "#/components/schemas/Order"
-        '401':
-          $ref: '#/components/responses/UnauthorizedErrorToken'
+        "401":
+          $ref: "#/components/responses/UnauthorizedErrorToken"
       security:
         - bearerAuth: []
       requestBody:
@@ -829,252 +896,6 @@ paths:
         required: true
         schema:
           type: number
-x-restlet:
-  sections:
-    General: {}
-    Authentication: {}
-    Suppliers:
-    Inventory management:
-      description: "You can updating your inventory, add products, check inventory levels."
-    Order management:
-      description: "You can fetch orders information, and update shipping"
-  texts:
-    w3j858v:
-      title: Terms
-      content: >
-        | Term | Definition |
-
-        | -------- | -------- |
-
-        | Channel | Retailer in Knawat network, ex: Market Place, e-commerce
-        store, Facebook Page |
-
-        | Supplier | Products vendor to Knawat network |
-
-        | Integrator | Third party company implementing integration for
-        suppliers or retailers |
-
-        | PO | Purchase Order |
-      section: General
-    1mol9lg:
-      title: Error handling
-      content: >+
-        This API uses standard HTTP status codes to indicate the status of a
-        response.
-
-
-        There are two main categories of error responses. Each have a different
-        response payload structure.
-
-
-        * Simple errors
-
-        * Detailed errors
-
-
-
-        # Simple errors
-
-
-        | Name | Code | Description |
-
-        | -------- | -------- | -------- |
-
-        | Bad request     | 400     | The request was unacceptable     |
-
-        | Unauthorized     | 401     | The request has not been applied because
-        it lacks valid authentication credentials for the target resource.     |
-
-        | Forbidden     | 403     | The server understood the request, but is
-        refusing to fulfill it     |
-
-        | Not Found     | 404     | The server has not found anything matching
-        the request URI     |
-
-        | Not acceptable     | 406     | The server is unable to return a
-        response in the format that was requested by the client     |
-
-        | Unsupported Media Type     | 415     | The server is refusing to
-        service the request because the entity of the request is in a format not
-        supported by the requested resource for the requested method     |
-
-        | Too many requests     | 429     | Too many requests hit the API too
-        quickly     |
-
-        | Server error     | 500     | A technical error occured in Restlet
-        Cloud     |
-
-
-
-
-
-
-
-        # Detailed errors
-
-        | Name | Code | Description |
-
-        | -------- | -------- | -------- |
-
-        | Un-processable entity     | 422     | The server understands the
-        content type of the request entity, and the syntax of the request entity
-        is correct, but was unable to process the contained instructions.     |
-
-
-
-
-      section: General
-    sze8xpf:
-      title: Support & Chat
-      content: >-
-        We are happy to receive you questions. click here to [chat with
-        us](https://gitter.im/Knawat/Lobby).
-      section: General
-    txa94ue:
-      title: Changelog
-      content: >-
-        **2.0.0**
-
-
-        *  Authentication Method is changed. User will have to send "Consumer
-        Key" and "Consumer Secret"
-
-        *  Endpoints are updated. No need to send SupplierId
-
-        *  Categories parameter is deprecated while adding products
-      section: General
-    zsj798i:
-      title: Authentication
-      content: >-
-        This API is secured using JWT,  [apply
-        now](https://developer.knawat.com/#contact-1) to get API keys.
-
-
-        You need to get token from <a href="#operation_get_token">/token</a>,
-        ans send Headers `Authorization: Bearer TOKEN` with each request, token
-        expires after 30 days.
-
-
-        Note:
-
-        You can inspect JWTs directly from your Chrome browser with
-        [JWTinspector.io](https://JWTinspector.io)!
-      section: Authentication
-    6qtjsat:
-      title: Apply as supplier
-      content: >+
-        ## Register new supplier
-
-        Once supplier show interest of Knawat service, we expect to send his
-        store information to [POST /supplier](#operation_create_a_supplier)
-        including URL to review his products, currency, discount he offers for
-        Knawat sales channels and contact information.
-
-
-        ## How the process goes
-
-        An account manager from Knawat purchase team will start to review his
-        products and communicate with his contact person to confirm his interest
-        and send contracts, once he approved status will change from "review" to
-        "approved".
-
-
-        ## Disable supplier
-
-        In case you need to disable supplier integration with Knawat, or
-        supplier himself want not to continue with Knawat, you need request
-        [DELETE /supplier](#operation_disable_a_supplier), all his products will
-        be archived in Knawat network.
-
-
-        In case you want to activate his account again, products will be added
-        to Knawat network as new products, so it'll go thru the products review
-        process, and will not submit again to channels that removed from, that
-        means less opportunity to get sales.
-
-
-        We highly recommend to ask suppliers two questions before submitting
-        their application to Knawat:
-
-        1. Can you deliver product to Knawat warehouse in Şişli, Istanbul within
-        two working days?
-
-        2. Do you agree on Knawat suppliers [Terms and
-        Conditions](https://knawat.com/terms-and-conditions/suppliers)?
-
-
-
-        | Value | Status |
-
-        | -------- | -------- |
-
-        | 0 | In review |
-
-        | 1 | Approved |
-
-        | -1 | Rejected |
-
-      section: Suppliers
-    flof4v0:
-      title: PO statuses
-      content: >-
-        ## Order Cancelation
-
-        Channels can cancel their orders before Knawat starts the international
-        shipping process.
-
-
-        ## Order Return
-
-        We have to cases two return orders to suppliers:
-
-        1. In case of supplier send a wrong or broken item.
-
-        2. In case the channel canceled the order before shipping it outside
-        Turkey.
-
-
-        Suppliers need to pick the items again from Knawat warehouse next
-        working day, while they are delivering next day items, we also can ship
-        it directly to your warehouse.
-
-
-        ## Reservations
-
-        Knawat allows channels to reserve qty for maximum three working days
-        until they confirm orders with their customer. Knawat maintains orders
-        status according to the following table:
-
-
-        ## Statuses
-
-        | Status | What? |
-
-        | -------- | -------- |
-
-        | reserved | PO created, not confirmed yet, supplier need to book the
-        qty |
-
-        | sent | PO orders, need to ship |
-
-        | purchase | PO delivered by the supplier, integrator need to change
-        status to purchase |
-
-        | done | PO paid to supplier |
-
-        | canceled | PO canceled |
-      section: Order management
-    3d6rep9:
-      title: Warehouse Statuses
-      content: |-
-        ## Statuses
-        | Status | What? |
-        | -------- | -------- |
-        | draft | WH order created |
-        | assigned | Waiting to deliver |
-        | done | WH order received |
-        | cancel | WH order canceled |
-      section: Order management
 servers:
   - description: Production Server
     url: https://suppliers.knawat.io/api
@@ -1129,13 +950,7 @@ components:
         data:
           type: object
       example:
-        {
-          "errorCode": 404,
-          "errorMessage": "SKU(s) out of stock.",
-          "data": {}
-        }
-      x-restlet:
-        section: General
+        { "errorCode": 404, "errorMessage": "SKU(s) out of stock.", "data": {} }
     Supplier:
       type: object
       required:
@@ -1224,30 +1039,30 @@ components:
           "languages": ["tr", "en"],
           "created_date": "2017-09-06T12:19:04.431+0000",
           "updated_date": "2017-09-06T12:19:04.431+0000",
-          "address": [
-            {
-              "line1": "Halaskargazi Mahallesi, D10 KAT5",
-              "line2": "Rumeli Cd. 35-37",
-              "post_code": "34371",
-              "city": "ŞIŞLI",
-              "state": "İSTANBUL",
-              "country": "TURKEY"
-            }
-          ],
-          "contacts": [
-            {
-              "department": "operations",
-              "name": "John Doe",
-              "email": "john.doe@examplestore.com.tr",
-              "phone": "+90215654356"
-            }
-          ],
+          "address":
+            [
+              {
+                "line1": "Halaskargazi Mahallesi, D10 KAT5",
+                "line2": "Rumeli Cd. 35-37",
+                "post_code": "34371",
+                "city": "ŞIŞLI",
+                "state": "İSTANBUL",
+                "country": "TURKEY",
+              },
+            ],
+          "contacts":
+            [
+              {
+                "department": "operations",
+                "name": "John Doe",
+                "email": "john.doe@examplestore.com.tr",
+                "phone": "+90215654356",
+              },
+            ],
           "excluded_brands": [],
           "excluded_attributes": [],
-          "excluded_categories": []
+          "excluded_categories": [],
         }
-      x-restlet:
-        section: Suppliers
     Product:
       type: object
       required:
@@ -1323,115 +1138,95 @@ components:
           maxItems: 100
       example:
         {
-          "products": [
-            {
-              "sku": "4646030019238",
-              "barcode": "1234567890",
-              "url": "https://example.com/product.php?id=123",
-              "name": {
-                "tr": "DAR KALIP PEMBE GÖMLEK",
-                "en": "Slimline Pink Shirt"
-              },
-              "description": {
-                "tr": "Some Turkish text here, html allowed",
-                "en": "Some English text here, html allowed"
-              },
-              "brand": {
-                "tr": "Defacto",
-                "en": "Defacto"
-              },
-              "images": [
-                "https://cdnp4.knawat.com/buyuk/788f8a17-d5d8-4ccb-b218-9e428b199228.jpg",
-                "https://cdnp4.knawat.com/buyuk/d8f20963-1772-45af-849d-da84e66d9a95.jpg",
-                "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg"
-              ],
-               "categories": [
+          "products":
+            [
+              {
+                "sku": "4646030019238",
+                "barcode": "1234567890",
+                "url": "https://example.com/product.php?id=123",
+                "name":
                   {
+                    "tr": "DAR KALIP PEMBE GÖMLEK",
+                    "en": "Slimline Pink Shirt",
+                  },
+                "description":
+                  {
+                    "tr": "Some Turkish text here, html allowed",
+                    "en": "Some English text here, html allowed",
+                  },
+                "brand": { "tr": "Defacto", "en": "Defacto" },
+                "images":
+                  [
+                    "https://cdnp4.knawat.com/buyuk/788f8a17-d5d8-4ccb-b218-9e428b199228.jpg",
+                    "https://cdnp4.knawat.com/buyuk/d8f20963-1772-45af-849d-da84e66d9a95.jpg",
+                    "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg",
+                  ],
+                "categories":
+                  [
+                    {
                       "_id": 74962,
-                      "name": {
+                      "name":
+                        {
                           "en": "Bags, Handbags & Cases",
-                          "ar": "حقائب وحقائب يد وحقائب صغيرة"
-                      },
+                          "ar": "حقائب وحقائب يد وحقائب صغيرة",
+                        },
                       "parentId": 182059,
                       "productsCount": 280,
-                      "treeNodeLevel": 4
-                  },
-                  {
-                      "_id": 182059,
-                      "name": {
-                          "en": "Vintage Accessories",
-                          "ar": "أكسسورات عتيقة"
-                      },
-                      "parentId": 175759,
-                      "productsCount": 282,
-                      "treeNodeLevel": 3
-                  }
-              ],
-              "attributes": [
-                {
-                  "name": {
-                    "tr": "Beden",
-                    "en": "Size"
-                  },
-                  "options": [
-                    {
-                      "tr": "S",
-                      "en": "S"
+                      "treeNodeLevel": 4,
                     },
                     {
-                      "tr": "M",
-                      "en": "M"
-                    }
-                  ]
-                }
-              ],
-              "variations": [
-                {
-                  "sku": "4646030019238-S",
-                  "barcode": "1234567890123",
-                  "sale_price": 9.74,
-                  "market_price": 11.99,
-                  "weight": 0.5,
-                  "quantity": 123,
-                  "attributes": [
+                      "_id": 182059,
+                      "name":
+                        { "en": "Vintage Accessories", "ar": "أكسسورات عتيقة" },
+                      "parentId": 175759,
+                      "productsCount": 282,
+                      "treeNodeLevel": 3,
+                    },
+                  ],
+                "attributes":
+                  [
                     {
-                      "name": {
-                        "tr": "Beden",
-                        "en": "Size"
-                      },
-                      "option": {
-                        "tr": "S",
-                        "en": "S"
-                      }
-                    }
-                  ]
-                },
-                {
-                  "sku": "4646030019238-M",
-                  "barcode": "1234567890124",
-                  "sale_price": 9.74,
-                  "market_price": 11.99,
-                  "weight": 0.5,
-                  "quantity": 321,
-                  "attributes": [
+                      "name": { "tr": "Beden", "en": "Size" },
+                      "options":
+                        [{ "tr": "S", "en": "S" }, { "tr": "M", "en": "M" }],
+                    },
+                  ],
+                "variations":
+                  [
                     {
-                      "name": {
-                        "tr": "Beden",
-                        "en": "Size"
-                      },
-                      "option": {
-                        "tr": "M",
-                        "en": "M"
-                      }
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
+                      "sku": "4646030019238-S",
+                      "barcode": "1234567890123",
+                      "sale_price": 9.74,
+                      "market_price": 11.99,
+                      "weight": 0.5,
+                      "quantity": 123,
+                      "attributes":
+                        [
+                          {
+                            "name": { "tr": "Beden", "en": "Size" },
+                            "option": { "tr": "S", "en": "S" },
+                          },
+                        ],
+                    },
+                    {
+                      "sku": "4646030019238-M",
+                      "barcode": "1234567890124",
+                      "sale_price": 9.74,
+                      "market_price": 11.99,
+                      "weight": 0.5,
+                      "quantity": 321,
+                      "attributes":
+                        [
+                          {
+                            "name": { "tr": "Beden", "en": "Size" },
+                            "option": { "tr": "M", "en": "M" },
+                          },
+                        ],
+                    },
+                  ],
+              },
+            ],
         }
-      x-restlet:
-        section: Inventory management
     ProductAttribute:
       type: object
       required:
@@ -1450,23 +1245,9 @@ components:
       example:
         {
           "id": "1",
-          "name": {
-            "tr": "Beden",
-            "en": "Size"
-          },
-          "options": [
-            {
-              "tr": "S",
-              "en": "S"
-            },
-            {
-              "tr": "M",
-              "en": "M"
-            }
-          ]
+          "name": { "tr": "Beden", "en": "Size" },
+          "options": [{ "tr": "S", "en": "S" }, { "tr": "M", "en": "M" }],
         }
-      x-restlet:
-        section: Inventory management
     ProductVariation:
       type: object
       required:
@@ -1506,21 +1287,14 @@ components:
           "market_price": 11.99,
           "quantity": 10,
           "weight": 0.5,
-          "attributes": [
-            {
-              "name": {
-                "tr": "Beden",
-                "en": "Size"
+          "attributes":
+            [
+              {
+                "name": { "tr": "Beden", "en": "Size" },
+                "option": { "tr": "M", "en": "M" },
               },
-              "option": {
-                "tr": "M",
-                "en": "M"
-              }
-            }
-          ]
+            ],
         }
-      x-restlet:
-        section: Inventory management
     ProductVariationAttribute:
       type: object
       properties:
@@ -1533,17 +1307,9 @@ components:
           $ref: "#/components/schemas/LanguagesObject"
       example:
         {
-          "name": {
-            "tr": "Beden",
-            "en": "Size"
-          },
-          "option": {
-            "tr": "M",
-            "en": "M"
-          }
+          "name": { "tr": "Beden", "en": "Size" },
+          "option": { "tr": "M", "en": "M" },
         }
-      x-restlet:
-        section: Inventory management
     Category:
       type: object
       required:
@@ -1554,15 +1320,14 @@ components:
       example:
         {
           "_id": 11450,
-          "name": {
+          "name":
+            {
               "en": "Clothing, Shoes & Accessories",
               "ar": "ملابس وأحذية وإكسسورات",
             },
           "productsCount": 0,
           "treeNodeLevel": 1,
         }
-      x-restlet:
-        section: Inventory management
     LanguagesObject:
       type: object
       properties:
@@ -1579,8 +1344,6 @@ components:
           "en": "Shoes / Women",
           "ar": "حذاء / نسائي",
         }
-      x-restlet:
-        section: Inventory management
     Order:
       type: object
       required:
@@ -1690,13 +1453,8 @@ components:
               "postcode": "57555",
               "country": "TR",
             },
-          "items": [{
-            "quantity": 2,
-            "sku": "G6667AZ17SPBE137-46"
-          }],
+          "items": [{ "quantity": 2, "sku": "G6667AZ17SPBE137-46" }],
           "shipping_carrier": "Example Company",
           "tracking_number": "123455",
           "supplier_message": "",
         }
-      x-restlet:
-        section: Order management
