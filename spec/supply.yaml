@@ -1,25 +1,27 @@
 openapi: 3.0.0
 info:
+  version: "2.0.0"
+
+  title: Knawat Suppliers
+
+  termsOfService: https://knawat.com/terms-and-conditions/
+  contact:
+    email: support@knawat.com
+    url: "https://developer.knawat.com"
+  license:
+    name: Knawat Copyright © - 2017 - 2019
+    url: "https://knawat.com/terms-and-conditions/"
+
   description: >-
     From here you can add your suppliers, and register their products API base
     url and credentials.
-  version: "2.0.0"
-  title: Knawat Suppliers
-  termsOfService: https://knawat.com/terms-and-conditions/
-  contact:
-    url: 'https://developer.knawat.com'
-    email: it@knawat.com
-  license:
-    name: Knawat Copyright © - 2017 - 2018
-    url: 'https://knawat.com/terms-and-conditions/'
-security:
-  - Token: []
+tags:
 paths:
   /token:
     post:
       summary: Get token
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -31,7 +33,7 @@ paths:
                   token:
                     type: string
                     description: Authenticated token
-        '422':
+        "422":
           description: Key or secret is invalid or required fields missing
       requestBody:
         content:
@@ -73,12 +75,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by basic authentication, if token 12345'
+          description: "Token provided by basic authentication, if token 12345"
           example: Basic 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -90,7 +92,7 @@ paths:
                   suppliers:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Supplier'
+                      $ref: "#/components/schemas/Supplier"
       security:
         - Basic_authentication: []
     post:
@@ -103,12 +105,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by basic authentication, if token 12345'
+          description: "Token provided by basic authentication, if token 12345"
           example: Basic 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -119,14 +121,14 @@ paths:
                 description: Return created supplier with supplier id
                 properties:
                   supplier:
-                    $ref: '#/components/schemas/Supplier'
+                    $ref: "#/components/schemas/Supplier"
       security:
         - Basic_authentication: []
       requestBody:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Supplier'
+              $ref: "#/components/schemas/Supplier"
         required: true
     put:
       summary: Update a supplier
@@ -137,12 +139,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by /token, if token 12345'
+          description: "Token provided by /token, if token 12345"
           example: Bearer 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
       requestBody:
         content:
@@ -189,21 +191,19 @@ paths:
                       items:
                         type: object
         required: true
-    x-restlet:
-      section: Suppliers
-  '/suppliers/{id}':
+  "/suppliers/{id}":
     get:
       summary: Get an individual supplier
       parameters:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by basic authentication, if token 12345'
+          description: "Token provided by basic authentication, if token 12345"
           example: Basic 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -211,7 +211,7 @@ paths:
                 type: object
                 properties:
                   supplier:
-                    $ref: '#/components/schemas/Supplier'
+                    $ref: "#/components/schemas/Supplier"
               examples:
                 response:
                   value: |-
@@ -246,7 +246,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -254,7 +254,7 @@ paths:
                 type: object
                 properties:
                   supplier:
-                    $ref: '#/components/schemas/Supplier'
+                    $ref: "#/components/schemas/Supplier"
               examples:
                 response:
                   value: |-
@@ -300,7 +300,7 @@ paths:
 
 
         Enableing supplier again will enable all his procuts again, but canwill
-        not back again to retailes store, they need to pick it as a new
+        not back again to retailers store, they need to pick it as a new
         supplier.
 
 
@@ -317,7 +317,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -325,7 +325,7 @@ paths:
                 type: object
                 properties:
                   supplier:
-                    $ref: '#/components/schemas/Supplier'
+                    $ref: "#/components/schemas/Supplier"
               examples:
                 response:
                   value: |-
@@ -361,12 +361,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by basic authentication, if token 12345'
+          description: "Token provided by basic authentication, if token 12345"
           example: Basic 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -414,22 +414,22 @@ paths:
         - name: qualified
           in: query
           required: false
-          description: '1: Qualified, 2: Needs to review, 4: Disqualified, 5 : Draft'
-          example: 'qualified : 2'
+          description: "1: Qualified, 2: Needs to review, 4: Disqualified, 5 : Draft"
+          example: "qualified : 2"
           schema:
             type: integer
         - name: category_id
           in: query
           required: false
-          description: 'if category_id = -1, get all un-categories products'
-          example: 'category_id : 1764,34'
+          description: "if category_id = -1, get all un-categories products"
+          example: "category_id : 1764,34"
           schema:
             type: string
         - name: keyword
           in: query
           required: false
           description: search in source name or sku
-          example: 'keyword : EM2566'
+          example: "keyword : EM2566"
           schema:
             type: string
         - name: stock
@@ -457,22 +457,22 @@ paths:
         - name: sort_by
           in: query
           required: false
-          description: 'allowed fields :name, stock, qualified, price, stock'
-          example: 'sort_by : stock'
+          description: "allowed fields :name, stock, qualified, price, stock"
+          example: "sort_by : stock"
           schema:
             type: string
         - name: sort_asc
           in: query
           required: false
-          description: 'sort_asc: 1 = acs, -1 = desc'
-          example: 'sort_asc : 1'
+          description: "sort_asc: 1 = acs, -1 = desc"
+          example: "sort_asc : 1"
           schema:
             type: string
         - name: language
           in: query
           required: false
-          description: 'tr, en, ar [default : tr]'
-          example: 'language : en'
+          description: "tr, en, ar [default : tr]"
+          example: "language : en"
           schema:
             type: string
         - name: Authorization
@@ -485,7 +485,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -495,7 +495,7 @@ paths:
                   count:
                     type: number
                   products:
-                    $ref: '#/components/schemas/Product'
+                    $ref: "#/components/schemas/Product"
     post:
       summary: Send new product(s)
       description: You can send one or more products
@@ -503,12 +503,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by /token, if token 12345'
+          description: "Token provided by /token, if token 12345"
           example: Bearer 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -524,9 +524,9 @@ paths:
                   products:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: "#/components/schemas/Product"
       requestBody:
-        $ref: '#/components/requestBodies/Body'
+        $ref: "#/components/requestBodies/Body"
     put:
       summary: Update Products
       description: >-
@@ -537,12 +537,12 @@ paths:
         - name: Authorization
           in: header
           required: true
-          description: 'Token provided by /token, if token 12345'
+          description: "Token provided by /token, if token 12345"
           example: Bearer 12345
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -557,12 +557,12 @@ paths:
                   products:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Product'
+                      $ref: "#/components/schemas/Product"
       requestBody:
-        $ref: '#/components/requestBodies/Body'
+        $ref: "#/components/requestBodies/Body"
     x-restlet:
       section: Inventory management
-  '/catalog/products/{sku}':
+  "/catalog/products/{sku}":
     get:
       summary: Get product by SKU
       parameters:
@@ -576,7 +576,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -584,12 +584,12 @@ paths:
                 type: object
                 properties:
                   product:
-                    $ref: '#/components/schemas/Product'
+                    $ref: "#/components/schemas/Product"
     put:
       summary: Update product by SKU
-      description: 'Update Variants, attributes, url, description, archive status, images'
+      description: "Update Variants, attributes, url, description, archive status, images"
       responses:
-        '200':
+        "200":
           description: Status 200
       requestBody:
         content:
@@ -600,7 +600,7 @@ paths:
                 - product
               properties:
                 product:
-                  $ref: '#/components/schemas/Product'
+                  $ref: "#/components/schemas/Product"
         required: true
     parameters:
       - name: sku
@@ -648,10 +648,10 @@ paths:
                   categories:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Category'
+                      $ref: "#/components/schemas/Category"
     x-restlet:
       section: Inventory management
-  /orders/:
+  /orders:
     get:
       summary: Get all orders
       description: >-
@@ -678,10 +678,10 @@ paths:
                   orders:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Order'
+                      $ref: "#/components/schemas/Order"
     x-restlet:
       section: Order management
-  '/orders/{id}':
+  "/orders/{id}":
     get:
       summary: Get order by id
       parameters:
@@ -695,7 +695,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -705,7 +705,7 @@ paths:
                   order:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Order'
+                      $ref: "#/components/schemas/Order"
     put:
       summary: Update order
       description: >-
@@ -722,7 +722,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -731,7 +731,7 @@ paths:
                 description: Return updated order
                 properties:
                   order:
-                    $ref: '#/components/schemas/Order'
+                    $ref: "#/components/schemas/Order"
       requestBody:
         content:
           application/json:
@@ -739,7 +739,7 @@ paths:
               type: object
               properties:
                 order:
-                  $ref: '#/components/schemas/Order'
+                  $ref: "#/components/schemas/Order"
         required: true
     parameters:
       - name: id
@@ -754,11 +754,10 @@ x-restlet:
     General: {}
     Authentication: {}
     Suppliers:
-      description: ''
     Inventory management:
-      description: 'You can updating your inventory, add products, check inventory levels.'
+      description: "You can updating your inventory, add products, check inventory levels."
     Order management:
-      description: 'You can fetch orders information, and update shipping'
+      description: "You can fetch orders information, and update shipping"
   texts:
     w3j858v:
       title: Terms
@@ -837,7 +836,7 @@ x-restlet:
 
         | -------- | -------- | -------- |
 
-        | Unprocessable entity     | 422     | The server understands the
+        | Un-processable entity     | 422     | The server understands the
         content type of the request entity, and the syntax of the request entity
         is correct, but was unable to process the contained instructions.     |
 
@@ -848,7 +847,7 @@ x-restlet:
     sze8xpf:
       title: Support & Chat
       content: >-
-        We are hapy to recive you questions. click here to [chat with
+        We are happy to receive you questions. click here to [chat with
         us](https://gitter.im/Knawat/Lobby).
       section: General
     txa94ue:
@@ -993,7 +992,7 @@ x-restlet:
         | -------- | -------- |
         | draft | WH order created |
         | assigned | Waiting to deliver |
-        | done | WH order recived |
+        | done | WH order received |
         | cancel | WH order canceled |
       section: Order management
 servers:
@@ -1014,7 +1013,7 @@ components:
               products:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Product'
+                  $ref: "#/components/schemas/Product"
                 minItems: 1
                 maxItems: 100
       required: true
@@ -1075,23 +1074,23 @@ components:
             Supplier status, check <a href="#text_apply_as_supplier">Apply as
             supplier</a>
           enum:
-            - '0'
-            - '1'
-            - '-1'
+            - "0"
+            - "1"
+            - "-1"
           pattern: READ-ONLY
         name:
           type: string
           description: Supplier name
         project_key:
           type: string
-          description: 'No spaces, no special characters'
+          description: "No spaces, no special characters"
           default: We cleanup name
         url:
           type: string
           description: Supplier online store URL
         logo:
           type: string
-          description: 'PNG alpha image, recommended 512*512px'
+          description: "PNG alpha image, recommended 512*512px"
         currency:
           type: string
           description: The default currency for products price
@@ -1151,7 +1150,7 @@ components:
           ],
           "contacts": [
             {
-              "department": "oprations",
+              "department": "operations",
               "name": "John Doe",
               "email": "john.doe@examplestore.com.tr",
               "phone": "+90215654356"
@@ -1189,7 +1188,7 @@ components:
         updated_date:
           type: string
           format: date-time
-          description: 'Automatically generated, last time you updated this product'
+          description: "Automatically generated, last time you updated this product"
           example: READ-ONLY
         last_checked:
           type: string
@@ -1197,7 +1196,7 @@ components:
           description: Last date you checked the source warehouse
         url:
           type: string
-          description: 'Product source url, for QA peruse'
+          description: "Product source url, for QA peruse"
         qualified:
           type: number
           description: |-
@@ -1207,13 +1206,13 @@ components:
           default: 2
           example: READ-ONLY
         name:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         description:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         description_short:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         brand:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         images:
           type: array
           description: List of images links from Knawat CDN servers
@@ -1223,17 +1222,17 @@ components:
           type: array
           description: Array of categories
           items:
-            $ref: '#/components/schemas/Category'
+            $ref: "#/components/schemas/Category"
         attributes:
           type: array
-          description: 'Any other information about this product, materials, gender ... etc'
+          description: "Any other information about this product, materials, gender ... etc"
           items:
-            $ref: '#/components/schemas/ProductAttribute'
+            $ref: "#/components/schemas/ProductAttribute"
         variations:
           type: array
           description: Product variations
           items:
-            $ref: '#/components/schemas/ProductVariation'
+            $ref: "#/components/schemas/ProductVariation"
           minItems: 1
           maxItems: 100
       example: |-
@@ -1356,13 +1355,13 @@ components:
           type: string
           description: Knawat attribute id required or attribute name
         name:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         options:
           type: array
           description: At least one option in one language required
           items:
-            $ref: '#/components/schemas/LanguagesObject'
-      example: |-
+            $ref: "#/components/schemas/LanguagesObject"
+      example:
         {
           "id": "1",
           "name": {
@@ -1399,7 +1398,7 @@ components:
           description: Variation barcode
         sale_price:
           type: number
-          description: 'Your sale price, Knawat cost, This is how much Knawat will pay you'
+          description: "Your sale price, Knawat cost, This is how much Knawat will pay you"
         market_price:
           type: number
           description: How much we have to sell this product?
@@ -1407,12 +1406,12 @@ components:
           type: number
         weight:
           type: number
-          description: 'Product weight, required for international shipping'
+          description: "Product weight, required for international shipping"
         attributes:
           type: array
-          description: 'At least one variation should be here, maybe size = STD if one size'
+          description: "At least one variation should be here, maybe size = STD if one size"
           items:
-            $ref: '#/components/schemas/ProductVariationAttribute'
+            $ref: "#/components/schemas/ProductVariationAttribute"
       example: |-
         {
           "sku": "4646030019238-M",
@@ -1443,9 +1442,9 @@ components:
           type: string
           description: Knawat attribute id required or attribute name
         name:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
         option:
-          $ref: '#/components/schemas/LanguagesObject'
+          $ref: "#/components/schemas/LanguagesObject"
       example: |-
         {
           "name": {
@@ -1471,10 +1470,10 @@ components:
                             "_id": 11450,
                             "name": {
                                 "en": "Clothing, Shoes & Accessories",
-                                "ar": "ملابس وأحذية وإكسسورات"
+              "ar": "ملابس وأحذية وإكسسورات",
                             },
                             "productsCount": 0,
-                            "treeNodeLevel": 1
+          "treeNodeLevel": 1,
                         }
       x-restlet:
         section: Inventory management
@@ -1492,7 +1491,7 @@ components:
         {
           "tr": "Ayakkabı / Kadın",
           "en": "Shoes / Women",
-          "ar": "حذاء / نسائي"
+          "ar": "حذاء / نسائي",
         }
       x-restlet:
         section: Inventory management
@@ -1528,12 +1527,12 @@ components:
           type: string
           format: date-time
           description: ISODate
-          example: '2018-01-19T12:00:00.000+3000'
-        modifaied_date:
+          example: "2018-01-19T12:00:00.000+3000"
+        modified_date:
           type: string
           format: date-time
           description: ISODate
-          example: '2018-01-19T12:00:00.000+3000'
+          example: "2018-01-19T12:00:00.000+3000"
         shipping:
           required:
             - address_1
@@ -1580,7 +1579,7 @@ components:
                 type: string
         shipping_carrier:
           type: string
-          default: 'DHL, Fedex'
+          default: "DHL, Fedex"
         tracking_number:
           type: string
         supplier_message:
@@ -1592,8 +1591,9 @@ components:
             "po_status": "reserved",
             "wh_status": "draft",
             "created_date": "2018-01-19T12:00:00.000+3000",
-            "modifaied_date": "2018-01-19T12:00:00.000+3000",
-            "shipping": {
+          "modified_date": "2018-01-19T12:00:00.000+3000",
+          "shipping":
+            {
                 "first_name": "Knawat",
                 "last_name": "LLC",
                 "company": "Knawat, LLC",
@@ -1602,17 +1602,15 @@ components:
                 "city": "example data",
                 "state": "Istanbul",
                 "postcode": "57555",
-                "country": "TR"
+              "country": "TR",
             },
-            "items": [
-                {
+          "items": [{
                     "quantity": 2,
                     "sku": "G6667AZ17SPBE137-46"
-                }
-            ],
+          }],
             "shipping_carrier": "Example Company",
             "tracking_number": "123455",
-            "supplier_message": ""
+          "supplier_message": "",
         }
       x-restlet:
         section: Order management
