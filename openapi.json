@@ -12,9 +12,6 @@
       "name": "Knawat Copyright © - 2017 - 2019",
       "url": "https://knawat.com/terms-and-conditions/"
     },
-    "x-logo": {
-      "url": "https://knawat.com/wp-content/themes/knawat/assets/images/knawat-orange-logo.svg"
-    },
     "description": "Welcome to the Knawat MP documentation. Navigate through the documentation to learn more. If you encounter any problems when using our APIs, send us an email it@knawat.com;\n## What is Knawat?\nKnawat is a Drop-Shipping platform. We are bringing hundreds of thousands of products to let you list in your e-commerce store. We also do all operations behind the e-commerce, so once you receive an order, we will ship it to your customer with your invoice.\n## What is Knawat MP API?\nKnawat MP APIs mainly for e-commerce stores, allows you to aggregate products to your store, update stock and prices, and send us your orders.\n## Features\n  * Fetch products with pagination\n  * fetch one product to validate price or qty\n  * All prices in USD\n\n## To-Dos\n  * Fetch product(s) with your currency\n  * Advanced products search with keyword\n\n## Support and Chat\n  We are happy to receive you questions. click here to [chat with\n    us](https://gitter.im/Knawat/Lobby).\n"
   },
   "tags": [
