@@ -20,6 +20,8 @@ paths:
   /token:
     post:
       summary: Get token
+      tags:
+        - Authentication
       responses:
         "200":
           description: Status 200
@@ -49,11 +51,11 @@ paths:
                 secret:
                   type: string
         required: true
-    x-restlet:
-      section: Authentication
   /suppliers:
     get:
       summary: Get all suppliers
+      tags:
+        - Suppliers
       description: >-
         **CACHE**: 10 mins, use <a
         href="#operation_get_an_individual_supplier">this</a> for uncached
@@ -97,6 +99,8 @@ paths:
         - Basic_authentication: []
     post:
       summary: Create a supplier
+      tags:
+        - suppliers
       description: >-
         Creating a supplier is an init for supplier review workflow, once
         supplier status changed to active, Knawat will fetch products once it's
@@ -132,6 +136,8 @@ paths:
         required: true
     put:
       summary: Update a supplier
+      tags:
+        - Suppliers
       description: >-
         Update logo, languages, address, contacts. empty supplier for Just
         Update last_check_date
@@ -194,6 +200,8 @@ paths:
   "/suppliers/{id}":
     get:
       summary: Get an individual supplier
+      tags:
+        - suppliers
       parameters:
         - name: Authorization
           in: header
@@ -234,6 +242,8 @@ paths:
                     }
     put:
       summary: Update a supplier
+      tags:
+        - suppliers
       description: With this API you can change state from disabled to approved
       parameters:
         - name: Authorization
@@ -294,6 +304,8 @@ paths:
         required: true
     delete:
       summary: Disable a supplier
+      tags:
+        - suppliers
       description: >-
         Knawat will not delete the supplier, we only disable his subscription
         and remove all his products from all sales channels.
@@ -352,11 +364,11 @@ paths:
         required: true
         schema:
           type: string
-    x-restlet:
-      section: Suppliers
-  '/suppliers/{id}/key':
+  "/suppliers/{id}/key":
     get:
       summary: Get suppliers keys
+      tags:
+        - suppliers
       parameters:
         - name: Authorization
           in: header
@@ -385,11 +397,11 @@ paths:
         required: true
         schema:
           type: string
-    x-restlet:
-      section: Suppliers
   /catalog/products:
     get:
       summary: Get list of products
+      tags:
+        - Inventory management
       description: >-
         Supplier can get all his products in our database.
 
@@ -498,6 +510,8 @@ paths:
                     $ref: "#/components/schemas/Product"
     post:
       summary: Send new product(s)
+      tags:
+        - Inventory management
       description: You can send one or more products
       parameters:
         - name: Authorization
@@ -529,6 +543,8 @@ paths:
         $ref: "#/components/requestBodies/Body"
     put:
       summary: Update Products
+      tags:
+        - Inventory management
       description: >-
         Bach update products by SKU, you should send** Variants, attributes,
         url, Qualified status**. you can update one or more products, just send
@@ -560,11 +576,11 @@ paths:
                       $ref: "#/components/schemas/Product"
       requestBody:
         $ref: "#/components/requestBodies/Body"
-    x-restlet:
-      section: Inventory management
   "/catalog/products/{sku}":
     get:
       summary: Get product by SKU
+      tags:
+        - Inventory management
       parameters:
         - name: Authorization
           in: header
@@ -587,6 +603,8 @@ paths:
                     $ref: "#/components/schemas/Product"
     put:
       summary: Update product by SKU
+      tags:
+        - Inventory management
       description: "Update Variants, attributes, url, description, archive status, images"
       responses:
         "200":
@@ -608,11 +626,11 @@ paths:
         required: true
         schema:
           type: string
-    x-restlet:
-      section: Inventory management
   /catalog/categories:
     get:
       summary: get all categories
+      tags:
+        - Inventory management
       parameters:
         - name: parentId
           in: query
@@ -636,7 +654,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -649,11 +667,11 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Category"
-    x-restlet:
-      section: Inventory management
   /orders:
     get:
       summary: Get all orders
+      tags:
+        - Order management
       description: >-
         Knawat creating orders to suppliers in daily bases, here all orders will
         be listed.
@@ -668,7 +686,7 @@ paths:
           schema:
             type: string
       responses:
-        '200':
+        "200":
           description: Status 200
           content:
             application/json:
@@ -679,11 +697,11 @@ paths:
                     type: array
                     items:
                       $ref: "#/components/schemas/Order"
-    x-restlet:
-      section: Order management
   "/orders/{id}":
     get:
       summary: Get order by id
+      tags:
+        - Order management
       parameters:
         - name: Authorization
           in: header
@@ -708,6 +726,8 @@ paths:
                       $ref: "#/components/schemas/Order"
     put:
       summary: Update order
+      tags:
+        - Order management
       description: >-
         Suppliers can send message or shipping info in case order in processing
         phase.
@@ -771,7 +791,7 @@ x-restlet:
 
         | Supplier | Products vendor to Knawat network |
 
-        | Integragtor | Third party company implementing integration for
+        | Integrator | Third party company implementing integration for
         suppliers or retailers |
 
         | PO | Purchase Order |
