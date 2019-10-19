@@ -182,9 +182,8 @@ paths:
                         type: string
                     address:
                       type: object
-                      description: |-
-                        [ 
-                                {
+                      description:
+                        [{
                                     "line1" : "Halaskargazi Mahallesi, D10 KAT5",
                                     "line2" : "Rumeli Cd. 35-37",
                                     "post_code" : "34371",
@@ -194,10 +193,9 @@ paths:
                                 }]
                     contacts:
                       type: array
-                      description: |-
-                        [
-                                {
-                                    "department" : "oprations",
+                      description:
+                        [{
+                          "department" : "operations",
                                     "name" : "John Doe",
                                     "email" : "john.doe@examplestore.com.tr",
                                     "phone" : "+90123454356"
@@ -230,7 +228,7 @@ paths:
                     $ref: "#/components/schemas/Supplier"
               examples:
                 response:
-                  value: |-
+                  value:
                     {
                         "supplier": {
                             "_id": "ku1gBhsblZp5dbAh",
@@ -279,7 +277,7 @@ paths:
                     $ref: "#/components/schemas/Supplier"
               examples:
                 response:
-                  value: |-
+                  value:
                     {
                         "supplier": {
                             "_id": "ku1gBhsblZp5dbAh",
@@ -356,7 +354,7 @@ paths:
                     $ref: "#/components/schemas/Supplier"
               examples:
                 response:
-                  value: |-
+                  value:
                     {
                         "supplier": {
                             "_id": "ku1gBhsblZp5dbAh",
@@ -406,7 +404,7 @@ paths:
                 type: object
               examples:
                 response:
-                  value: |-
+                  value: 
                     {
                         "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
                         "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX"
@@ -472,10 +470,12 @@ paths:
           in: query
           required: false
           description: stock range
-          example: |-
+          example:
+            {
             stock : {
             stock_from: 12,
             stock_to: 50
+            }
             }
           schema:
             type: string
@@ -483,10 +483,12 @@ paths:
           in: query
           required: false
           description: price range
-          example: |-
-            price : {
+          example:
+            { 
+              price: {
             price_from: 12,
             price_to: 50
+            }
             }
           schema:
             type: string
@@ -1126,7 +1128,7 @@ components:
           type: string
         data:
           type: object
-      example: |-
+      example:
         {
             "errorCode": 404,
             "errorMessage": "SKU(s) out of stock.",
@@ -1210,7 +1212,7 @@ components:
             website
           items:
             type: object
-      example: |
+      example:
         {
           "id": "59afe7",
           "state": "review",
@@ -1319,7 +1321,7 @@ components:
             $ref: "#/components/schemas/ProductVariation"
           minItems: 1
           maxItems: 100
-      example: |-
+      example:
         {
           "products": [
             {
@@ -1496,7 +1498,7 @@ components:
           description: "At least one variation should be here, maybe size = STD if one size"
           items:
             $ref: "#/components/schemas/ProductVariationAttribute"
-      example: |-
+      example:
         {
           "sku": "4646030019238-M",
           "barcode": "1234567890124",
@@ -1529,7 +1531,7 @@ components:
           $ref: "#/components/schemas/LanguagesObject"
         option:
           $ref: "#/components/schemas/LanguagesObject"
-      example: |-
+      example:
         {
           "name": {
             "tr": "Beden",
@@ -1549,7 +1551,7 @@ components:
       properties:
         id:
           type: number
-      example: |2-
+      example:
          {
                             "_id": 11450,
                             "name": {
@@ -1571,7 +1573,7 @@ components:
         ar:
           type: string
       description: One language at least required
-      example: |-
+      example:
         {
           "tr": "Ayakkabı / Kadın",
           "en": "Shoes / Women",
@@ -1669,7 +1671,7 @@ components:
         supplier_message:
           type: string
           description: Supplier can send here whatever he wants to our warehouse
-      example: |-
+      example:
         {
             "id": 1001,
             "po_status": "reserved",
