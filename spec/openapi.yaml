@@ -11,8 +11,8 @@ info:
   license:
     name: Knawat Copyright © - 2017 - 2019
     url: 'https://knawat.com/terms-and-conditions/'
-  x-logo:
-    url: 'https://knawat.com/wp-content/themes/knawat/assets/images/knawat-orange-logo.svg'
+  # x-logo:
+  #   url: 'https://knawat.com/wp-content/themes/knawat/assets/images/knawat-orange-logo.svg'
 
   description: >
     Welcome to the Knawat MP documentation. Navigate through the documentation

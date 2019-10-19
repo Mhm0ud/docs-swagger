@@ -1,0 +1,1618 @@
+openapi: 3.0.0
+info:
+  description: >-
+    From here you can add your suppliers, and register their products API base
+    url and credentials.
+  version: "2.0.0"
+  title: Knawat Suppliers
+  termsOfService: https://knawat.com/terms-and-conditions/
+  contact:
+    url: 'https://developer.knawat.com'
+    email: it@knawat.com
+  license:
+    name: Knawat Copyright © - 2017 - 2018
+    url: 'https://knawat.com/terms-and-conditions/'
+security:
+  - Token: []
+paths:
+  /token:
+    post:
+      summary: Get token
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                required:
+                  - token
+                type: object
+                properties:
+                  token:
+                    type: string
+                    description: Authenticated token
+        '422':
+          description: Key or secret is invalid or required fields missing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - key
+                - secret
+              properties:
+                key:
+                  type: string
+                secret:
+                  type: string
+        required: true
+    x-restlet:
+      section: Authentication
+  /suppliers:
+    get:
+      summary: Get all suppliers
+      description: >-
+        **CACHE**: 10 mins, use <a
+        href="#operation_get_an_individual_supplier">this</a> for uncached
+        response.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+            maximum: 100
+            default: 0
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by basic authentication, if token 12345'
+          example: Basic 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                  suppliers:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supplier'
+      security:
+        - Basic_authentication: []
+    post:
+      summary: Create a supplier
+      description: >-
+        Creating a supplier is an init for supplier review workflow, once
+        supplier status changed to active, Knawat will fetch products once it's
+        ready.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by basic authentication, if token 12345'
+          example: Basic 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                required:
+                  - supplier
+                type: object
+                description: Return created supplier with supplier id
+                properties:
+                  supplier:
+                    $ref: '#/components/schemas/Supplier'
+      security:
+        - Basic_authentication: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Supplier'
+        required: true
+    put:
+      summary: Update a supplier
+      description: >-
+        Update logo, languages, address, contacts. empty supplier for Just
+        Update last_check_date
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by /token, if token 12345'
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - supplier
+              properties:
+                supplier:
+                  type: object
+                  description: >-
+                    Update logo, languages, address, contacts. empty supplier
+                    for Just Update last_check_date
+                  properties:
+                    logo:
+                      type: string
+                    languages:
+                      type: array
+                      items:
+                        type: string
+                    address:
+                      type: object
+                      description: |-
+                        [ 
+                                {
+                                    "line1" : "Halaskargazi Mahallesi, D10 KAT5",
+                                    "line2" : "Rumeli Cd. 35-37",
+                                    "post_code" : "34371",
+                                    "city" : "sisli",
+                                    "state" : "ISTANBUL",
+                                    "country" : "TURKEY"
+                                }]
+                    contacts:
+                      type: array
+                      description: |-
+                        [
+                                {
+                                    "department" : "oprations",
+                                    "name" : "John Doe",
+                                    "email" : "john.doe@examplestore.com.tr",
+                                    "phone" : "+90123454356"
+                                }]
+                      items:
+                        type: object
+        required: true
+    x-restlet:
+      section: Suppliers
+  '/suppliers/{id}':
+    get:
+      summary: Get an individual supplier
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by basic authentication, if token 12345'
+          example: Basic 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  supplier:
+                    $ref: '#/components/schemas/Supplier'
+              examples:
+                response:
+                  value: |-
+                    {
+                        "supplier": {
+                            "_id": "ku1gBhsblZp5dbAh",
+                            "state": "review",
+                            "name": "Pasionwear",
+                            "url": "https://examplestore.com.tr",
+                            "currency": "TRY",
+                            "created_date": "2018-05-07T08:06:40.980Z",
+                            "updated_date": "2018-05-07T08:06:40.980Z",
+                            "contacts": [
+                                {
+                                    "email": "sales@examplestore.com.tr",
+                                    "phone": "+90215654356"
+                                }
+                            ]
+                        }
+                    }
+    put:
+      summary: Update a supplier
+      description: With this API you can change state from disabled to approved
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  supplier:
+                    $ref: '#/components/schemas/Supplier'
+              examples:
+                response:
+                  value: |-
+                    {
+                        "supplier": {
+                            "_id": "ku1gBhsblZp5dbAh",
+                            "state": "disabled",
+                            "name": "Pasionwear",
+                            "url": "https://examplestore.com.tr",
+                            "currency": "TRY",
+                            "created_date": "2018-05-07T08:06:40.980Z",
+                            "updated_date": "2018-05-07T08:06:40.980Z",
+                            "contacts": [
+                                {
+                                    "email": "sales@examplestore.com.tr",
+                                    "phone": "+90215654356"
+                                }
+                            ]
+                        }
+                    }
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - supplier
+              properties:
+                supplier:
+                  required:
+                    - state
+                  type: object
+                  properties:
+                    state:
+                      type: string
+                      description: You only can send review
+        required: true
+    delete:
+      summary: Disable a supplier
+      description: >-
+        Knawat will not delete the supplier, we only disable his subscription
+        and remove all his products from all sales channels.
+
+
+        Enableing supplier again will enable all his procuts again, but canwill
+        not back again to retailes store, they need to pick it as a new
+        supplier.
+
+
+        Here we changing state from `approved` to `disabled`, if supplier state
+        is `rejected`, no thing will happen
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  supplier:
+                    $ref: '#/components/schemas/Supplier'
+              examples:
+                response:
+                  value: |-
+                    {
+                        "supplier": {
+                            "_id": "ku1gBhsblZp5dbAh",
+                            "state": "disabled",
+                            "name": "Pasionwear",
+                            "url": "https://examplestore.com.tr",
+                            "currency": "TRY",
+                            "created_date": "2018-05-07T08:06:40.980Z",
+                            "updated_date": "2018-05-07T08:06:40.980Z",
+                            "contacts": [
+                                {
+                                    "email": "sales@examplestore.com.tr",
+                                    "phone": "+90215654356"
+                                }
+                            ]
+                        }
+                    }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-restlet:
+      section: Suppliers
+  '/suppliers/{id}/key':
+    get:
+      summary: Get suppliers keys
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by basic authentication, if token 12345'
+          example: Basic 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                response:
+                  value: |-
+                    {
+                        "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                        "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX"
+                    }
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    x-restlet:
+      section: Suppliers
+  /catalog/products:
+    get:
+      summary: Get list of products
+      description: >-
+        Supplier can get all his products in our database.
+
+
+        **CACHE**: 10 mins, use <a
+        href="#operation_get_product_by_sku_or_barcode">this</a> for uncached
+        response.
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: number
+            maximum: 1000
+            default: 20
+        - name: offset
+          in: query
+          required: false
+          schema:
+            type: number
+            default: 0
+        - name: qualified
+          in: query
+          required: false
+          description: '1: Qualified, 2: Needs to review, 4: Disqualified, 5 : Draft'
+          example: 'qualified : 2'
+          schema:
+            type: integer
+        - name: category_id
+          in: query
+          required: false
+          description: 'if category_id = -1, get all un-categories products'
+          example: 'category_id : 1764,34'
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          required: false
+          description: search in source name or sku
+          example: 'keyword : EM2566'
+          schema:
+            type: string
+        - name: stock
+          in: query
+          required: false
+          description: stock range
+          example: |-
+            stock : {
+            stock_from: 12,
+            stock_to: 50
+            }
+          schema:
+            type: string
+        - name: price
+          in: query
+          required: false
+          description: price range
+          example: |-
+            price : {
+            price_from: 12,
+            price_to: 50
+            }
+          schema:
+            type: string
+        - name: sort_by
+          in: query
+          required: false
+          description: 'allowed fields :name, stock, qualified, price, stock'
+          example: 'sort_by : stock'
+          schema:
+            type: string
+        - name: sort_asc
+          in: query
+          required: false
+          description: 'sort_asc: 1 = acs, -1 = desc'
+          example: 'sort_asc : 1'
+          schema:
+            type: string
+        - name: language
+          in: query
+          required: false
+          description: 'tr, en, ar [default : tr]'
+          example: 'language : en'
+          schema:
+            type: string
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                  products:
+                    $ref: '#/components/schemas/Product'
+    post:
+      summary: Send new product(s)
+      description: You can send one or more products
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by /token, if token 12345'
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                required:
+                  - count
+                  - products
+                type: object
+                properties:
+                  count:
+                    type: number
+                    description: Total number of created products
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+    put:
+      summary: Update Products
+      description: >-
+        Bach update products by SKU, you should send** Variants, attributes,
+        url, Qualified status**. you can update one or more products, just send
+        an array.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: 'Token provided by /token, if token 12345'
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                required:
+                  - count
+                  - products
+                type: object
+                properties:
+                  count:
+                    type: number
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+      requestBody:
+        $ref: '#/components/requestBodies/Body'
+    x-restlet:
+      section: Inventory management
+  '/catalog/products/{sku}':
+    get:
+      summary: Get product by SKU
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product:
+                    $ref: '#/components/schemas/Product'
+    put:
+      summary: Update product by SKU
+      description: 'Update Variants, attributes, url, description, archive status, images'
+      responses:
+        '200':
+          description: Status 200
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - product
+              properties:
+                product:
+                  $ref: '#/components/schemas/Product'
+        required: true
+    parameters:
+      - name: sku
+        in: path
+        required: true
+        schema:
+          type: string
+    x-restlet:
+      section: Inventory management
+  /catalog/categories:
+    get:
+      summary: get all categories
+      parameters:
+        - name: parentId
+          in: query
+          required: false
+          description: Parent category Id
+          schema:
+            type: number
+        - name: level
+          in: query
+          required: false
+          description: Category level
+          schema:
+            type: number
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                  categories:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Category'
+    x-restlet:
+      section: Inventory management
+  /orders/:
+    get:
+      summary: Get all orders
+      description: >-
+        Knawat creating orders to suppliers in daily bases, here all orders will
+        be listed.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  orders:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+    x-restlet:
+      section: Order management
+  '/orders/{id}':
+    get:
+      summary: Get order by id
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Order'
+    put:
+      summary: Update order
+      description: >-
+        Suppliers can send message or shipping info in case order in processing
+        phase.
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          description: >-
+            Token provided by <a href="#operation_get_token">/token</a>, if
+            token 12345
+          example: Bearer 12345
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Status 200
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Return updated order
+                properties:
+                  order:
+                    $ref: '#/components/schemas/Order'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                order:
+                  $ref: '#/components/schemas/Order'
+        required: true
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: number
+    x-restlet:
+      section: Order management
+x-restlet:
+  sections:
+    General: {}
+    Authentication: {}
+    Suppliers:
+      description: ''
+    Inventory management:
+      description: 'You can updating your inventory, add products, check inventory levels.'
+    Order management:
+      description: 'You can fetch orders information, and update shipping'
+  texts:
+    w3j858v:
+      title: Terms
+      content: >
+        | Term | Definition |
+
+        | -------- | -------- |
+
+        | Channel | Retailer in Knawat network, ex: Market Place, e-commerce
+        store, Facebook Page |
+
+        | Supplier | Products vendor to Knawat network |
+
+        | Integragtor | Third party company implementing integration for
+        suppliers or retailers |
+
+        | PO | Purchase Order |
+      section: General
+    1mol9lg:
+      title: Error handling
+      content: >+
+        This API uses standard HTTP status codes to indicate the status of a
+        response.
+
+
+        There are two main categories of error responses. Each have a different
+        response payload structure.
+
+
+        * Simple errors
+
+        * Detailed errors
+
+
+
+        # Simple errors
+
+
+        | Name | Code | Description |
+
+        | -------- | -------- | -------- |
+
+        | Bad request     | 400     | The request was unacceptable     |
+
+        | Unauthorized     | 401     | The request has not been applied because
+        it lacks valid authentication credentials for the target resource.     |
+
+        | Forbidden     | 403     | The server understood the request, but is
+        refusing to fulfill it     |
+
+        | Not Found     | 404     | The server has not found anything matching
+        the request URI     |
+
+        | Not acceptable     | 406     | The server is unable to return a
+        response in the format that was requested by the client     |
+
+        | Unsupported Media Type     | 415     | The server is refusing to
+        service the request because the entity of the request is in a format not
+        supported by the requested resource for the requested method     |
+
+        | Too many requests     | 429     | Too many requests hit the API too
+        quickly     |
+
+        | Server error     | 500     | A technical error occured in Restlet
+        Cloud     |
+
+
+
+
+
+
+
+        # Detailed errors
+
+        | Name | Code | Description |
+
+        | -------- | -------- | -------- |
+
+        | Unprocessable entity     | 422     | The server understands the
+        content type of the request entity, and the syntax of the request entity
+        is correct, but was unable to process the contained instructions.     |
+
+
+
+
+      section: General
+    sze8xpf:
+      title: Support & Chat
+      content: >-
+        We are hapy to recive you questions. click here to [chat with
+        us](https://gitter.im/Knawat/Lobby).
+      section: General
+    txa94ue:
+      title: Changelog
+      content: >-
+        **2.0.0**
+
+
+        *  Authentication Method is changed. User will have to send "Consumer
+        Key" and "Consumer Secret"
+
+        *  Endpoints are updated. No need to send SupplierId
+
+        *  Categories parameter is deprecated while adding products
+      section: General
+    zsj798i:
+      title: Authentication
+      content: >-
+        This API is secured using JWT,  [apply
+        now](https://developer.knawat.com/#contact-1) to get API keys.
+
+
+        You need to get token from <a href="#operation_get_token">/token</a>,
+        ans send Headers `Authorization: Bearer TOKEN` with each request, token
+        expires after 30 days.
+
+
+        Note:
+
+        You can inspect JWTs directly from your Chrome browser with
+        [JWTinspector.io](https://JWTinspector.io)!
+      section: Authentication
+    6qtjsat:
+      title: Apply as supplier
+      content: >+
+        ## Register new supplier
+
+        Once supplier show interest of Knawat service, we expect to send his
+        store information to [POST /supplier](#operation_create_a_supplier)
+        including URL to review his products, currency, discount he offers for
+        Knawat sales channels and contact information.
+
+
+        ## How the process goes
+
+        An account manager from Knawat purchase team will start to review his
+        products and communicate with his contact person to confirm his interest
+        and send contracts, once he approved status will change from "review" to
+        "approved".
+
+
+        ## Disable supplier
+
+        In case you need to disable supplier integration with Knawat, or
+        supplier himself want not to continue with Knawat, you need request
+        [DELETE /supplier](#operation_disable_a_supplier), all his products will
+        be archived in Knawat network.
+
+
+        In case you want to activate his account again, products will be added
+        to Knawat network as new products, so it'll go thru the products review
+        process, and will not submit again to channels that removed from, that
+        means less opportunity to get sales.
+
+
+        We highly recommend to ask suppliers two questions before submitting
+        their application to Knawat:
+
+        1. Can you deliver product to Knawat warehouse in Şişli, Istanbul within
+        two working days?
+
+        2. Do you agree on Knawat suppliers [Terms and
+        Conditions](https://knawat.com/terms-and-conditions/suppliers)?
+
+
+
+        | Value | Status |
+
+        | -------- | -------- |
+
+        | 0 | In review |
+
+        | 1 | Approved |
+
+        | -1 | Rejected |
+
+      section: Suppliers
+    flof4v0:
+      title: PO statuses
+      content: >-
+        ## Order Cancelation
+
+        Channels can cancel their orders before Knawat starts the international
+        shipping process.
+
+
+        ## Order Return
+
+        We have to cases two return orders to suppliers:
+
+        1. In case of supplier send a wrong or broken item.
+
+        2. In case the channel canceled the order before shipping it outside
+        Turkey.
+
+
+        Suppliers need to pick the items again from Knawat warehouse next
+        working day, while they are delivering next day items, we also can ship
+        it directly to your warehouse.
+
+
+        ## Reservations
+
+        Knawat allows channels to reserve qty for maximum three working days
+        until they confirm orders with their customer. Knawat maintains orders
+        status according to the following table:
+
+
+        ## Statuses
+
+        | Status | What? |
+
+        | -------- | -------- |
+
+        | reserved | PO created, not confirmed yet, supplier need to book the
+        qty |
+
+        | sent | PO orders, need to ship |
+
+        | purchase | PO delivered by the supplier, integrator need to change
+        status to purchase |
+
+        | done | PO paid to supplier |
+
+        | canceled | PO canceled |
+      section: Order management
+    3d6rep9:
+      title: Warehouse Statuses
+      content: |-
+        ## Statuses
+        | Status | What? |
+        | -------- | -------- |
+        | draft | WH order created |
+        | assigned | Waiting to deliver |
+        | done | WH order recived |
+        | cancel | WH order canceled |
+      section: Order management
+servers:
+# Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/HazemKhaled/knawat-mp/2.0.0
+  - url: 'https://suppliers.knawat.io/api'
+components:
+  requestBodies:
+    Body:
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - products
+            properties:
+              products:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+                minItems: 1
+                maxItems: 100
+      required: true
+  securitySchemes:
+    Token:
+      description: >-
+        Knawat API uses JWT tokens for authentication. Tokens default validity
+        is 30 days. Read more about JWT tokens at https://jwt.io
+      type: apiKey
+      name: Authorization
+      in: header
+    Basic_authentication:
+      description: For knawat users only
+      type: http
+      scheme: basic
+  schemas:
+    Error:
+      type: object
+      required:
+        - errorCode
+        - errorMessage
+      properties:
+        errorCode:
+          type: number
+        errorMessage:
+          type: string
+        data:
+          type: object
+      example: |-
+        {
+            "errorCode": 404,
+            "errorMessage": "SKU(s) out of stock.",
+            "data": {}
+        }
+      x-restlet:
+        section: General
+    Supplier:
+      type: object
+      required:
+        - address
+        - contacts
+        - created_date
+        - currency
+        - id
+        - languages
+        - name
+        - state
+        - updated_date
+        - url
+      properties:
+        id:
+          type: string
+          description: Unique identification to represent a supplier
+          pattern: READ-ONLY
+        state:
+          type: string
+          description: >-
+            Supplier status, check <a href="#text_apply_as_supplier">Apply as
+            supplier</a>
+          enum:
+            - '0'
+            - '1'
+            - '-1'
+          pattern: READ-ONLY
+        name:
+          type: string
+          description: Supplier name
+        project_key:
+          type: string
+          description: 'No spaces, no special characters'
+          default: We cleanup name
+        url:
+          type: string
+          description: Supplier online store URL
+        logo:
+          type: string
+          description: 'PNG alpha image, recommended 512*512px'
+        currency:
+          type: string
+          description: The default currency for products price
+          minLength: 3
+          maxLength: 3
+        languages:
+          type: array
+          items:
+            type: string
+          minItems: 2
+          maxItems: 2
+          example: en
+        created_date:
+          type: string
+          format: date-time
+          description: The date the supplier was created
+        updated_date:
+          type: string
+          format: date-time
+          description: The last date the supplier was updated.
+          example: READ-ONLY
+        address:
+          type: array
+          description: One or more address for supplier warehouses
+          items:
+            type: object
+        contacts:
+          type: array
+          description: >-
+            This object contains an array of contact persons information like
+
+            department, name, title, firstname, lastname,telephone, fax, mobile,
+            website
+          items:
+            type: object
+      example: |
+        {
+          "id": "59afe7",
+          "state": "review",
+          "project_key": "pasionwear",
+          "name": "Pasionwear",
+          "logo": "https://example.com.tr/logo.png",
+          "url": "https://example.com.tr",
+          "currency": "TRY",
+          "languages": ["tr", "en"],
+          "created_date": "2017-09-06T12:19:04.431+0000",
+          "updated_date": "2017-09-06T12:19:04.431+0000",
+          "address": [
+            {
+              "line1": "Halaskargazi Mahallesi, D10 KAT5",
+              "line2": "Rumeli Cd. 35-37",
+              "post_code": "34371",
+              "city": "ŞIŞLI",
+              "state": "İSTANBUL",
+              "country": "TURKEY"
+            }
+          ],
+          "contacts": [
+            {
+              "department": "oprations",
+              "name": "John Doe",
+              "email": "john.doe@examplestore.com.tr",
+              "phone": "+90215654356"
+            }
+          ],
+          "excluded_brands": [],
+          "excluded_attributes": [],
+          "excluded_categories": []
+        }
+      x-restlet:
+        section: Suppliers
+    Product:
+      type: object
+      required:
+        - barcode
+        - categories
+        - description
+        - images
+        - name
+        - sku
+        - supplierId
+        - url
+        - variations
+      properties:
+        sku:
+          type: string
+        barcode:
+          type: string
+        supplierId:
+          type: string
+        created_date:
+          type: string
+          format: date-time
+          example: READ-ONLY
+        updated_date:
+          type: string
+          format: date-time
+          description: 'Automatically generated, last time you updated this product'
+          example: READ-ONLY
+        last_checked:
+          type: string
+          format: date-time
+          description: Last date you checked the source warehouse
+        url:
+          type: string
+          description: 'Product source url, for QA peruse'
+        qualified:
+          type: number
+          description: |-
+            1: Qualified 
+            2: Needs to review
+            4: Disqualified
+          default: 2
+          example: READ-ONLY
+        name:
+          $ref: '#/components/schemas/LanguagesObject'
+        description:
+          $ref: '#/components/schemas/LanguagesObject'
+        description_short:
+          $ref: '#/components/schemas/LanguagesObject'
+        brand:
+          $ref: '#/components/schemas/LanguagesObject'
+        images:
+          type: array
+          description: List of images links from Knawat CDN servers
+          items:
+            type: string
+        categories:
+          type: array
+          description: Array of categories
+          items:
+            $ref: '#/components/schemas/Category'
+        attributes:
+          type: array
+          description: 'Any other information about this product, materials, gender ... etc'
+          items:
+            $ref: '#/components/schemas/ProductAttribute'
+        variations:
+          type: array
+          description: Product variations
+          items:
+            $ref: '#/components/schemas/ProductVariation'
+          minItems: 1
+          maxItems: 100
+      example: |-
+        {
+          "products": [
+            {
+              "sku": "4646030019238",
+              "barcode": "1234567890",
+              "url": "https://example.com/product.php?id=123",
+              "name": {
+                "tr": "DAR KALIP PEMBE GÖMLEK",
+                "en": "Slimline Pink Shirt"
+              },
+              "description": {
+                "tr": "Some Turkish text here, html allowed",
+                "en": "Some English text here, html allowed"
+              },
+              "brand": {
+                "tr": "Defacto",
+                "en": "Defacto"
+              },
+              "images": [
+                "https://cdnp4.knawat.com/buyuk/788f8a17-d5d8-4ccb-b218-9e428b199228.jpg",
+                "https://cdnp4.knawat.com/buyuk/d8f20963-1772-45af-849d-da84e66d9a95.jpg",
+                "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg"
+              ],
+               "categories": [
+                        {
+                            "_id": 74962,
+                            "name": {
+                                "en": "Bags, Handbags & Cases",
+                                "ar": "حقائب وحقائب يد وحقائب صغيرة"
+                            },
+                            "parentId": 182059,
+                            "productsCount": 280,
+                            "treeNodeLevel": 4
+                        },
+                        {
+                            "_id": 182059,
+                            "name": {
+                                "en": "Vintage Accessories",
+                                "ar": "أكسسورات عتيقة"
+                            },
+                            "parentId": 175759,
+                            "productsCount": 282,
+                            "treeNodeLevel": 3
+                        }
+              ],
+              "attributes": [
+                {
+                  "name": {
+                    "tr": "Beden",
+                    "en": "Size"
+                  },
+                  "options": [
+                    {
+                      "tr": "S",
+                      "en": "S"
+                    },
+                    {
+                      "tr": "M",
+                      "en": "M"
+                    }
+                  ]
+                }
+              ],
+              "variations": [
+                {
+                  "sku": "4646030019238-S",
+                  "barcode": "1234567890123",
+                  "sale_price": 9.74,
+                  "market_price": 11.99,
+                  "weight": 0.5,
+                  "quantity": 123,
+                  "attributes": [
+                    {
+                      "name": {
+                        "tr": "Beden",
+                        "en": "Size"
+                      },
+                      "option": {
+                        "tr": "S",
+                        "en": "S"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "sku": "4646030019238-M",
+                  "barcode": "1234567890124",
+                  "sale_price": 9.74,
+                  "market_price": 11.99,
+                  "weight": 0.5,
+                  "quantity": 321,
+                  "attributes": [
+                    {
+                      "name": {
+                        "tr": "Beden",
+                        "en": "Size"
+                      },
+                      "option": {
+                        "tr": "M",
+                        "en": "M"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      x-restlet:
+        section: Inventory management
+    ProductAttribute:
+      type: object
+      required:
+        - options
+      properties:
+        id:
+          type: string
+          description: Knawat attribute id required or attribute name
+        name:
+          $ref: '#/components/schemas/LanguagesObject'
+        options:
+          type: array
+          description: At least one option in one language required
+          items:
+            $ref: '#/components/schemas/LanguagesObject'
+      example: |-
+        {
+          "id": "1",
+          "name": {
+            "tr": "Beden",
+            "en": "Size"
+          },
+          "options": [
+            {
+              "tr": "S",
+              "en": "S"
+            },
+            {
+              "tr": "M",
+              "en": "M"
+            }
+          ]
+        }
+      x-restlet:
+        section: Inventory management
+    ProductVariation:
+      type: object
+      required:
+        - attributes
+        - quantity
+        - sale_price
+        - sku
+        - weight
+      properties:
+        sku:
+          type: string
+          description: Variation id
+        barcode:
+          type: string
+          description: Variation barcode
+        sale_price:
+          type: number
+          description: 'Your sale price, Knawat cost, This is how much Knawat will pay you'
+        market_price:
+          type: number
+          description: How much we have to sell this product?
+        quantity:
+          type: number
+        weight:
+          type: number
+          description: 'Product weight, required for international shipping'
+        attributes:
+          type: array
+          description: 'At least one variation should be here, maybe size = STD if one size'
+          items:
+            $ref: '#/components/schemas/ProductVariationAttribute'
+      example: |-
+        {
+          "sku": "4646030019238-M",
+          "barcode": "1234567890124",
+          "sale_price": 9.74,
+          "market_price": 11.99,
+          "quantity": 10,
+          "weight": 0.5,
+          "attributes": [
+            {
+              "name": {
+                "tr": "Beden",
+                "en": "Size"
+              },
+              "option": {
+                "tr": "M",
+                "en": "M"
+              }
+            }
+          ]
+        }
+      x-restlet:
+        section: Inventory management
+    ProductVariationAttribute:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Knawat attribute id required or attribute name
+        name:
+          $ref: '#/components/schemas/LanguagesObject'
+        option:
+          $ref: '#/components/schemas/LanguagesObject'
+      example: |-
+        {
+          "name": {
+            "tr": "Beden",
+            "en": "Size"
+          },
+          "option": {
+            "tr": "M",
+            "en": "M"
+          }
+        }
+      x-restlet:
+        section: Inventory management
+    Category:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          type: number
+      example: |2-
+         {
+                            "_id": 11450,
+                            "name": {
+                                "en": "Clothing, Shoes & Accessories",
+                                "ar": "ملابس وأحذية وإكسسورات"
+                            },
+                            "productsCount": 0,
+                            "treeNodeLevel": 1
+                        }
+      x-restlet:
+        section: Inventory management
+    LanguagesObject:
+      type: object
+      properties:
+        tr:
+          type: string
+        en:
+          type: string
+        ar:
+          type: string
+      description: One language at least required
+      example: |-
+        {
+          "tr": "Ayakkabı / Kadın",
+          "en": "Shoes / Women",
+          "ar": "حذاء / نسائي"
+        }
+      x-restlet:
+        section: Inventory management
+    Order:
+      type: object
+      required:
+        - created_date
+        - id
+        - items
+        - po_status
+      properties:
+        id:
+          type: number
+        po_status:
+          type: string
+          description: 'More info <a href="#text_po_statuses">here</a>'
+          default: reserved
+          enum:
+            - reserved
+            - sent
+            - purchase
+            - done
+            - canceled
+        wh_status:
+          type: string
+          description: 'More info <a href="#text_wh_statuses">here</a>'
+          enum:
+            - draft
+            - cancel
+            - assigned
+            - done
+        created_date:
+          type: string
+          format: date-time
+          description: ISODate
+          example: '2018-01-19T12:00:00.000+3000'
+        modifaied_date:
+          type: string
+          format: date-time
+          description: ISODate
+          example: '2018-01-19T12:00:00.000+3000'
+        shipping:
+          required:
+            - address_1
+            - address_2
+            - city
+            - company
+            - country
+            - first_name
+            - last_name
+            - postcode
+            - state
+          type: object
+          properties:
+            first_name:
+              type: string
+            last_name:
+              type: string
+            company:
+              type: string
+            address_1:
+              type: string
+            address_2:
+              type: string
+            city:
+              type: string
+            state:
+              type: string
+            postcode:
+              type: string
+            country:
+              type: string
+        items:
+          type: array
+          items:
+            required:
+              - quantity
+              - sku
+            type: object
+            properties:
+              quantity:
+                type: number
+                minimum: 1
+              sku:
+                type: string
+        shipping_carrier:
+          type: string
+          default: 'DHL, Fedex'
+        tracking_number:
+          type: string
+        supplier_message:
+          type: string
+          description: Supplier can send here whatever he wants to our warehouse
+      example: |-
+        {
+            "id": 1001,
+            "po_status": "reserved",
+            "wh_status": "draft",
+            "created_date": "2018-01-19T12:00:00.000+3000",
+            "modifaied_date": "2018-01-19T12:00:00.000+3000",
+            "shipping": {
+                "first_name": "Knawat",
+                "last_name": "LLC",
+                "company": "Knawat, LLC",
+                "address_1": "Our warehouse address",
+                "address_2": "",
+                "city": "example data",
+                "state": "Istanbul",
+                "postcode": "57555",
+                "country": "TR"
+            },
+            "items": [
+                {
+                    "quantity": 2,
+                    "sku": "G6667AZ17SPBE137-46"
+                }
+            ],
+            "shipping_carrier": "Example Company",
+            "tracking_number": "123455",
+            "supplier_message": ""
+        }
+      x-restlet:
+        section: Order management
