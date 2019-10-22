@@ -228,7 +228,7 @@ paths:
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
       security:
-        - basicAuth: []
+        - bearerAuth: []
       requestBody:
         content:
           application/json:
@@ -485,8 +485,8 @@ paths:
                 response:
                   value:
                     {
-                      "consumerKey": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
-                      "consumerSecret": "XXXXXXXXXXXXXXXXXXXXXXXX",
+                      "key": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                      "secret": "XXXXXXXXXXXXXXXXXXXXXXXX",
                     }
         "401":
           $ref: "#/components/responses/UnauthorizedErrorBasic"
