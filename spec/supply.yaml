@@ -40,7 +40,7 @@ info:
       | Not acceptable     | 406     | The server is unable to return a response in the format that was requested by the client     |
       | Unsupported Media Type     | 415     | The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method |
       | Too many requests     | 429     | Too many requests hit the API too quickly |
-      | Server error     | 500     | A technical error occurred in Restlet Cloud |
+      | Server error     | 500     | A technical error occurred |
 
       # Detailed errors
       | Name | Code | Description |
@@ -53,7 +53,7 @@ tags:
     description: >-
       Get orders, and update shipping status
 
-      ## Order Cancelation
+      ## Order Cancellation
 
       Channels can cancel their orders before Knawat starts the international shipping process.
 
