@@ -12,7 +12,7 @@
       "name": "Knawat Copyright © - 2017 - 2019",
       "url": "https://knawat.com/terms-and-conditions/"
     },
-    "description": "Welcome to the Knawat MP documentation. Navigate through the documentation to learn more. If you encounter any problems when using our APIs, send us an email it@knawat.com;\n## What is Knawat?\nKnawat is a Drop-Shipping platform. We are bringing hundreds of thousands of products to let you list in your e-commerce store. We also do all operations behind the e-commerce, so once you receive an order, we will ship it to your customer with your invoice.\n## What is Knawat MP API?\nKnawat MP APIs mainly for e-commerce stores, allows you to aggregate products to your store, update stock and prices, and send us your orders.\n## Features\n  * Fetch products with pagination\n  * fetch one product to validate price or qty\n  * All prices in USD\n\n## To-Dos\n  * Fetch product(s) with your currency\n  * Advanced products search with keyword\n\n## Support and Chat\n  We are happy to receive you questions. click here to [chat with\n    us](https://gitter.im/Knawat/Lobby).\n"
+    "description": "Welcome to the Knawat MP documentation. Navigate through the documentation to learn more. If you encounter any problems when using our APIs, send us an email it@knawat.com;\n## What is Knawat?\nKnawat is a Drop-Shipping platform. We are bringing hundreds of thousands of products to let you list in your e-commerce store. We also do all operations behind the e-commerce, so once you receive an order, we will ship it to your customer with your invoice.\n## What is Knawat MP API?\nKnawat MP APIs mainly for e-commerce stores, allows you to aggregate products to your store, update stock and prices, and send us your orders.\n## Features\n  * Fetch products with pagination\n  * fetch one product to validate price or qty\n  * All prices in USD\n\n## To-Dos\n  * Fetch product(s) with your currency\n  * Advanced products search with keyword\n\n## Support and Chat\n  We are happy to receive your questions. click here to [chat with\n    us](https://gitter.im/Knawat/Lobby).\n"
   },
   "tags": [
     {
@@ -80,9 +80,6 @@
                 }
               }
             }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
           },
           "422": {
             "description": "Status 422",
@@ -1869,8 +1866,7 @@
                   "required": [
                     "cost",
                     "courier",
-                    "duration",
-                    "odoo_id"
+                    "duration"
                   ],
                   "type": "object",
                   "properties": {
@@ -1882,9 +1878,6 @@
                     },
                     "duration": {
                       "type": "string"
-                    },
-                    "odoo_id": {
-                      "type": "number"
                     }
                   }
                 }
@@ -2390,7 +2383,12 @@
   },
   "servers": [
     {
+      "description": "Production Server",
       "url": "https://mp.knawat.io/api"
+    },
+    {
+      "description": "Sandbox Server",
+      "url": "https://dev.mp.knawat.io/api"
     }
   ],
   "components": {
@@ -2560,7 +2558,7 @@
             "en": "Slimline Pink Shirt"
           },
           "description": {
-            "tr": "%100 Pamuk<br>*Cep Detay <br>*Uzun Katlanabilir Kol&nbsp;<br>*Önden Düğmeli<br>*Yanları Düğmeli <br>*Dar Kalıp <br>*Boy Uzunluğu:63 cm<br>Numune Bedeni:&nbsp;36/S/1<br>Modelin Ölçüleri:&nbsp;Boy:1,76, Göğüs:86, Bel:60, Kalça: 91",
+            "tr": "%100 Pamuk<br>*Cep Detay <br>*Uzun Katlanabilir Kol<br>*Önden Düğmeli<br>*Yanları Düğmeli <br>*Dar Kalıp <br>*Boy Uzunluğu:63 cm<br>Numune Bedeni: 36/S/1<br>Modelin Ölçüleri: Boy:1,76, Göğüs:86, Bel:60, Kalça: 91",
             "en": "<ul><li>100% Cotton</li><li>*Pocket Detailed</li><li>*Long Layered Sleeves</li><li>*Front Buttons</li><li>*Buttons on Sides</li><li>*Narrow Cut</li><li>*Length:63 cm</li><li>Sample Size: 36/S/1</li><li>Model's Measurements: Height:1,76, Chest:86, Waist:60, Hip: 91</li></ul>",
             "ar": "<ul><li>%100 قطن</li><li>مزين بجيب</li><li>بكم طويل قابل للازالة</li><li>بأزرار من الامام</li><li>بأزرار من الجوانب</li><li>سليم فت</li><li>الطول:63 سم</li><li>مقاس الجسم: 36/S/1</li><li>قياسات العارض: الطول:1,76, الصدر:86, الوسط:60, الخصر: 91</li></ul>"
           },
@@ -2950,7 +2948,7 @@
             }
           ],
           "shipping": {
-            "first_name": "Jhon",
+            "first_name": "John",
             "last_name": "Doe",
             "company": "Knawat",
             "address_1": "Halaskargazi Mahallesi, D10 KAT5 Cd, Rumeli Cd. 35-37",
@@ -2962,7 +2960,7 @@
             "email": "info@knawat.com",
             "phone": "(0212) 296 11 94"
           },
-          "invoice_url": "http://knawat.com/invoices/pdf/example.pdf",
+          "invoice_url": "http://example.com/invoice.pdf",
           "notes": "My Orders"
         }
       },
@@ -3073,9 +3071,7 @@
             "description": "Lowercase only allowed",
             "enum": [
               "woocommerce",
-              "magento1",
               "magento2",
-              "salla",
               "expandcart",
               "opencart",
               "shopify",
@@ -3274,7 +3270,6 @@
         "required": [
           "countries",
           "name",
-          "odoo_id",
           "rules"
         ],
         "properties": {
@@ -3288,9 +3283,6 @@
               "minLength": 2,
               "maxLength": 2
             }
-          },
-          "odoo_id": {
-            "type": "number"
           },
           "rules": {
             "type": "array",
