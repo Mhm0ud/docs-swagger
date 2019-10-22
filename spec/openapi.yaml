@@ -42,7 +42,7 @@ info:
       * Advanced products search with keyword
 
     ## Support and Chat
-      We are happy to receive you questions. click here to [chat with
+      We are happy to receive your questions. click here to [chat with
         us](https://gitter.im/Knawat/Lobby).
 tags:
   - name: Authentication
@@ -1542,7 +1542,7 @@ paths:
 servers:
   - description: Production Server
     url: https://mp.knawat.io/api
-  - description: Sandbox
+  - description: Sandbox Server
     url: https://dev.mp.knawat.io/api
 components:
   responses:
@@ -1667,7 +1667,7 @@ components:
           },
           "description": {
             "tr":
-              "%100 Pamuk<br>*Cep Detay <br>*Uzun Katlanabilir Kol&nbsp;<br>*Önden Düğmeli<br>*Yanları Düğmeli <br>*Dar Kalıp <br>*Boy Uzunluğu:63 cm<br>Numune Bedeni:&nbsp;36/S/1<br>Modelin Ölçüleri:&nbsp;Boy:1,76, Göğüs:86, Bel:60, Kalça: 91",
+              "%100 Pamuk<br>*Cep Detay <br>*Uzun Katlanabilir Kol<br>*Önden Düğmeli<br>*Yanları Düğmeli <br>*Dar Kalıp <br>*Boy Uzunluğu:63 cm<br>Numune Bedeni: 36/S/1<br>Modelin Ölçüleri: Boy:1,76, Göğüs:86, Bel:60, Kalça: 91",
             "en":
               "<ul><li>100% Cotton</li><li>*Pocket Detailed</li><li>*Long Layered Sleeves</li><li>*Front Buttons</li><li>*Buttons on Sides</li><li>*Narrow Cut</li><li>*Length:63 cm</li><li>Sample Size: 36/S/1</li><li>Model's Measurements: Height:1,76, Chest:86, Waist:60, Hip: 91</li></ul>",
             "ar":
@@ -1990,7 +1990,7 @@ components:
                 }
             ],
             "shipping": {
-                "first_name": "Jhon",
+                "first_name": "John",
                 "last_name": "Doe",
                 "company": "Knawat",
                 "address_1": "Halaskargazi Mahallesi, D10 KAT5 Cd, Rumeli Cd. 35-37",
@@ -2002,7 +2002,7 @@ components:
                 "email": "info@knawat.com",
                 "phone": "(0212) 296 11 94"
             },
-            "invoice_url": "http://knawat.com/invoices/pdf/example.pdf",
+            "invoice_url": "http://example.com/invoice.pdf",
             "notes": "My Orders"
         }
     OrderResponse:

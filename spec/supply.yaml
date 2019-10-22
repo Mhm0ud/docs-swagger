@@ -17,7 +17,7 @@ info:
     url and credentials.
 
     ## Support and Chat
-      We are happy to receive you questions. click here to [chat with us](https://gitter.im/Knawat/Lobby).
+      We are happy to receive your questions. click here to [chat with us](https://gitter.im/Knawat/Lobby).
 
     ## Errors Handling
       This API uses standard HTTP status codes to indicate the status of a
@@ -171,10 +171,10 @@ paths:
     post:
       summary: Create a supplier
       tags:
-        - suppliers
+        - Suppliers
       description: >-
         Creating a supplier is an init for supplier review workflow, once
-        supplier status changed to active, Knawat will fetch products once it's
+        supplier status changed to active, Knawat will fetch products once it"s
         ready.
       parameters:
         - name: Authorization
@@ -280,7 +280,7 @@ paths:
     get:
       summary: Get an individual supplier
       tags:
-        - suppliers
+        - Suppliers
       parameters:
         - name: Authorization
           in: header
@@ -402,7 +402,7 @@ paths:
         and remove all his products from all sales channels.
 
 
-        Enableing supplier again will enable all his procuts again, but canwill
+        Enabling supplier again will enable all his products again, but will
         not back again to retailers store, they need to pick it as a new
         supplier.
 
@@ -465,7 +465,7 @@ paths:
     get:
       summary: Get suppliers keys
       tags:
-        - suppliers
+        - Suppliers
       parameters:
         - name: Authorization
           in: header
@@ -647,7 +647,7 @@ paths:
       tags:
         - Inventory management
       description: >-
-        Bach update products by SKU, you should send** Variants, attributes,
+        Batch update products by SKU, you should send** Variants, attributes,
         url, Qualified status**. you can update one or more products, just send
         an array.
       parameters:
@@ -899,7 +899,7 @@ paths:
 servers:
   - description: Production Server
     url: https://suppliers.knawat.io/api
-  - description: Sandbox
+  - description: Sandbox Server
     url: https://dev.suppliers.knawat.io/api
 components:
   responses:
