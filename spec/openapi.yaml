@@ -1223,7 +1223,6 @@ paths:
                   - cost
                   - courier
                   - duration
-                  - odoo_id
                 type: object
                 properties:
                   courier:
@@ -1232,8 +1231,6 @@ paths:
                     type: number
                   duration:
                     type: string
-                  odoo_id:
-                    type: number
         '401':
           $ref: '#/components/responses/UnauthorizedErrorBasic'
       security:
@@ -2088,9 +2085,7 @@ components:
           description: Lowercase only allowed
           enum:
             - woocommerce
-            - magento1
             - magento2
-            - salla
             - expandcart
             - opencart
             - shopify
@@ -2240,7 +2235,6 @@ components:
       required:
         - countries
         - name
-        - odoo_id
         - rules
       properties:
         name:
@@ -2251,8 +2245,7 @@ components:
             type: string
             minLength: 2
             maxLength: 2
-        odoo_id:
-          type: number
+            
         rules:
           type: array
           items:
