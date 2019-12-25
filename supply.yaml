@@ -13,8 +13,13 @@ info:
     url: "https://knawat.com/terms-and-conditions/"
 
   description: >-
-    From here you can add your suppliers, and register their products API base
-    url and credentials.
+    Knawat Supply API allows you to list your products on Knawat and get purchase orders, it's also allow you to set order status and shipping tracking number.
+
+    ## Getting Started
+    
+    In Knawat each supplier has a different `consumerKey` and `consumerSecret`, which you can get from your account manager. You need those keys for API authorization.
+
+    Knawat suppliers npm package: [![npm version](https://badge.fury.io/js/%40knawat%2Fsuppliers.svg)](https://badge.fury.io/js/%40knawat%2Fsuppliers).
 
     ## Support and Chat
       We are happy to receive your questions. click here to [chat with us](https://gitter.im/Knawat/Lobby).
