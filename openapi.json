@@ -1,60 +1,30 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "version": "1.2.7",
-    "title": "Knawat MP",
+    "version": "2.0.0",
+    "title": "Knawat Suppliers",
     "termsOfService": "https://knawat.com/terms-and-conditions/",
     "contact": {
       "email": "support@knawat.com",
       "url": "https://developer.knawat.com"
     },
     "license": {
-      "name": "Knawat Copyright © - 2017 - 2019",
+      "name": "Knawat Copyright © - 2017 - 2020",
       "url": "https://knawat.com/terms-and-conditions/"
     },
-    "description": "Welcome to the Knawat MP documentation. Navigate through the documentation to learn more. If you encounter any problems when using our APIs, send us an email it@knawat.com;\n## What is Knawat?\nKnawat is a Drop-Shipping platform. We are bringing hundreds of thousands of products to let you list in your e-commerce store. We also do all operations behind the e-commerce, so once you receive an order, we will ship it to your customer with your invoice.\n## What is Knawat MP API?\nKnawat MP APIs mainly for e-commerce stores, allows you to aggregate products to your store, update stock and prices, and send us your orders.\n## Features\n  * Fetch products with pagination\n  * fetch one product to validate price or qty\n  * All prices in USD\n\n## To-Dos\n  * Fetch product(s) with your currency\n  * Advanced products search with keyword\n\n## Support and Chat\n  We are happy to receive your questions. click here to [chat with\n    us](https://gitter.im/Knawat/Lobby).\n"
+    "description": "Knawat Supply API allows you to list your products on Knawat and get purchase orders, it's also allow you to set order status and shipping tracking number.\n## Getting Started\nIn Knawat each supplier has a different `consumerKey` and `consumerSecret`, which you can get from your account manager. You need those keys for API authorization.\nKnawat suppliers npm package: [![npm version](https://badge.fury.io/js/%40knawat%2Fsuppliers.svg)](https://badge.fury.io/js/%40knawat%2Fsuppliers).\n## Support and Chat\n  We are happy to receive your questions. click here to [chat with us](https://gitter.im/Knawat/Lobby).\n\n## Errors Handling\n  This API uses standard HTTP status codes to indicate the status of a\n  response.\n\n  There are two main categories of error responses. Each have a different\n  response payload structure.\n\n  * Simple errors\n  * Detailed errors\n\n  # Simple errors\n\n  | Name | Code | Description |\n  | -------- | -------- | -------- |\n  | Bad request     | 400     | The request was unacceptable     |\n  | Unauthorized     | 401     | The request has not been applied because it lacks valid authentication credentials for the target resource.     |\n  | Forbidden     | 403     | The server understood the request, but is refusing to fulfill it     |\n  | Not Found     | 404     | The server has not found anything matching the request URI     |\n  | Not acceptable     | 406     | The server is unable to return a response in the format that was requested by the client     |\n  | Unsupported Media Type     | 415     | The server is refusing to service the request because the entity of the request is in a format not supported by the requested resource for the requested method |\n  | Too many requests     | 429     | Too many requests hit the API too quickly |\n  | Server error     | 500     | A technical error occurred |\n\n  # Detailed errors\n  | Name | Code | Description |\n  | -------- | -------- | -------- |\n  | Un-processable entity     | 422     | The server understands the content type of the request entity, and the syntax of the request entity is correct, but was unable to process the contained instructions. |"
   },
   "tags": [
     {
-      "name": "Authentication",
-      "description": "text here"
+      "name": "Inventory Management",
+      "description": "Updating your inventory, add products, check inventory levels."
     },
     {
-      "name": "My Products",
-      "description": "How products can come to your API?\n![](https://www.dropbox.com/s/tb8708y269pccx0/ZApp%20-%20products.png?dl=1)\n",
-      "externalDocs": {
-        "description": "Register and import some products",
-        "url": "https://app.knawat.com"
-      }
+      "name": "Order Management",
+      "description": "Get orders, and update shipping status\n## Order Cancellation\nChannels can cancel their orders before Knawat starts the international shipping process.\n## Order Return\nWe have to cases two return orders to suppliers:\n1. In case of supplier send a wrong or broken item.\n2. In case the channel canceled the order before shipping it outside Turkey.\nSuppliers need to pick the items again from Knawat warehouse next working day, while they are delivering next day items, we also can ship it directly to your warehouse.\n## Reservations\nKnawat allows channels to reserve qty for maximum three working days until they confirm orders with their customer. Knawat maintains orders status according to the following table:\n## Statuses\n| Status | What? | | -------- | -------- | | reserved | PO created, not confirmed yet, supplier need to book the qty | | sent | PO orders, need to ship | | purchase | PO delivered by the supplier, integrator need to change status to purchase | | done | PO paid to supplier | | canceled | PO canceled |"
     },
     {
-      "name": "Orders"
-    },
-    {
-      "name": "Invoices"
-    },
-    {
-      "name": "Payments"
-    },
-    {
-      "name": "Enterprise Only",
-      "description": "Ask sales for enterprise subscriptions",
-      "externalDocs": {
-        "url": "https://knawat.com/pricing"
-      }
-    },
-    {
-      "name": "Stores"
-    },
-    {
-      "name": "Products",
-      "description": "This is how you can get all Knawat products to list it directly on your store, this endpoint for enterprise only customers only"
-    },
-    {
-      "name": "Currencies"
-    },
-    {
-      "name": "Shipment"
+      "name": "Suppliers"
     }
   ],
   "paths": {
@@ -70,11 +40,14 @@
             "content": {
               "application/json": {
                 "schema": {
+                  "required": [
+                    "token"
+                  ],
                   "type": "object",
-                  "description": "Channel information",
                   "properties": {
-                    "channel": {
-                      "type": "object"
+                    "token": {
+                      "type": "string",
+                      "description": "Authenticated token"
                     }
                   }
                 }
@@ -82,32 +55,23 @@
             }
           },
           "422": {
-            "description": "Status 422",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "consumerKey or consumerSecret is wrong"
-                }
-              }
-            }
+            "description": "Key or secret is invalid or required fields missing"
           }
         },
-        "security": [],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
-                  "consumerKey",
-                  "consumerSecret"
+                  "key",
+                  "secret"
                 ],
                 "properties": {
-                  "consumerKey": {
+                  "key": {
                     "type": "string"
                   },
-                  "consumerSecret": {
+                  "secret": {
                     "type": "string"
                   }
                 }
@@ -118,76 +82,91 @@
         }
       }
     },
-    "/catalog/products": {
+    "/suppliers": {
       "get": {
-        "summary": "Get Products",
+        "summary": "Get all suppliers",
         "tags": [
-          "My Products"
+          "Suppliers"
         ],
-        "description": "Retrieve imported products, sorted by create date DESC",
+        "description": "**CACHE**: 10 mins, use <a href=\"#operation_get_an_individual_supplier\">this</a> for uncached response.",
         "parameters": [
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "description": "Size of the page to retrieve.",
             "schema": {
-              "type": "integer",
+              "type": "number",
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
               "maximum": 100,
-              "default": 10
+              "default": 0
             }
           },
           {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "description": "Number of the page to retrieve.",
-            "schema": {
-              "type": "integer",
-              "minimum": 1,
-              "default": 1
-            }
-          },
-          {
-            "name": "lastupdate",
-            "in": "query",
-            "required": false,
-            "description": "Timestamp(seconds since Jan 01 1970. (UTC)) of last import run DateTime (must be in UTC), API will respond only products which are updated/created after this timestamp.",
-            "example": "1542794072 for 21-11-2018 @ 9:54am",
-            "schema": {
-              "type": "string",
-              "format": "date-time"
-            }
-          },
-          {
-            "name": "keyword",
-            "in": "query",
-            "required": false,
-            "description": "Full text search in sku field",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by basic authentication, if token 12345",
+            "example": "Basic 12345",
             "schema": {
               "type": "string"
             }
-          },
-          {
-            "name": "hideOutOfStock",
-            "in": "query",
-            "required": false,
-            "description": "Hide out of stock products",
-            "example": "1 => Hide archived products else will not hide",
-            "schema": {
-              "type": "number"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "suppliers": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Supplier"
+                      }
+                    }
+                  }
+                }
+              }
             }
           },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
           {
-            "name": "currency",
-            "in": "query",
-            "required": false,
-            "description": "3 digit numeric ISO 4217 codes",
+            "basicAuth": []
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a supplier",
+        "tags": [
+          "Suppliers"
+        ],
+        "description": "Creating a supplier is an init for supplier review workflow, once supplier status changed to active, Knawat will fetch products once it\"s ready.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by basic authentication, if token 12345",
+            "example": "Basic 12345",
             "schema": {
-              "type": "string",
-              "minLength": 3,
-              "maxLength": 3,
-              "pattern": "^[A-Z]{3}$"
+              "type": "string"
             }
           }
         ],
@@ -198,20 +177,545 @@
               "application/json": {
                 "schema": {
                   "required": [
-                    "products",
-                    "total"
+                    "supplier"
                   ],
                   "type": "object",
+                  "description": "Return created supplier with supplier id",
                   "properties": {
-                    "products": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Product"
+                    "supplier": {
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Supplier"
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "put": {
+        "summary": "Update a supplier",
+        "tags": [
+          "Suppliers"
+        ],
+        "description": "Update logo, languages, address, contacts. empty supplier for Just Update last_check_date",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by /token, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200"
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "supplier"
+                ],
+                "properties": {
+                  "supplier": {
+                    "type": "object",
+                    "description": "Update logo, languages, address, contacts. empty supplier for Just Update last_check_date",
+                    "properties": {
+                      "logo": {
+                        "type": "string"
+                      },
+                      "languages": {
+                        "type": "array",
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "address": {
+                        "type": "object",
+                        "description": "[\n  {\n    \"line1\": \"Halaskargazi Mahallesi, D10 KAT5\",\n    \"line2\": \"Rumeli Cd. 35-37\",\n    \"post_code\": \"34371\",\n    \"city\": \"sisli\",\n    \"state\": \"ISTANBUL\",\n    \"country\": \"TR\",\n  },"
+                      },
+                      "contacts": {
+                        "type": "array",
+                        "description": "[\n  {\n    \"department\": \"operations\",\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@examplestore.com.tr\",\n    \"phone\": \"+90123454356\",\n  },\n]",
+                        "items": {
+                          "type": "object"
+                        }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        }
+      }
+    },
+    "/suppliers/{id}": {
+      "get": {
+        "summary": "Get an individual supplier",
+        "tags": [
+          "Suppliers"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by basic authentication, if token 12345",
+            "example": "Basic 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "supplier": {
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "review",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      },
+      "put": {
+        "summary": "Update a supplier",
+        "tags": [
+          "Suppliers"
+        ],
+        "description": "With this API you can change state from disabled to approved",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "supplier": {
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "disabled",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "supplier"
+                ],
+                "properties": {
+                  "supplier": {
+                    "required": [
+                      "state"
+                    ],
+                    "type": "object",
+                    "properties": {
+                      "state": {
+                        "type": "string",
+                        "description": "You only can send review"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        }
+      },
+      "delete": {
+        "summary": "Disable a supplier",
+        "description": "Knawat will not delete the supplier, we only disable his subscription and remove all his products from all sales channels.\n\nEnabling supplier again will enable all his products again, but will not back again to retailers store, they need to pick it as a new supplier.\n\nHere we changing state from `approved` to `disabled`, if supplier state is `rejected`, no thing will happen",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "supplier": {
+                      "$ref": "#/components/schemas/Supplier"
+                    }
+                  }
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "supplier": {
+                        "_id": "ku1gBhsblZp5dbAh",
+                        "state": "disabled",
+                        "name": "Pasionwear",
+                        "url": "https://examplestore.com.tr",
+                        "currency": "TRY",
+                        "created_date": "2018-05-07T08:06:40.980Z",
+                        "updated_date": "2018-05-07T08:06:40.980Z",
+                        "contacts": [
+                          {
+                            "email": "sales@examplestore.com.tr",
+                            "phone": "+90215654356"
+                          }
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ],
+        "tags": [
+          "Suppliers"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/suppliers/{id}/key": {
+      "get": {
+        "summary": "Get suppliers keys",
+        "tags": [
+          "Suppliers"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by basic authentication, if token 12345",
+            "example": "Basic 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                },
+                "examples": {
+                  "response": {
+                    "value": {
+                      "key": "XXXXXXXXXXXXXXXXXXXXXXXXXXX",
+                      "secret": "XXXXXXXXXXXXXXXXXXXXXXXX"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorBasic"
+          }
+        },
+        "security": [
+          {
+            "basicAuth": []
+          }
+        ]
+      },
+      "parameters": [
+        {
+          "name": "id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "/catalog/products": {
+      "get": {
+        "summary": "Get list of products",
+        "tags": [
+          "Inventory Management"
+        ],
+        "description": "Supplier can get all his products in our database.\n\n**CACHE**: 10 mins, use <a href=\"#operation_get_product_by_sku_or_barcode\">this</a> for uncached response.",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "maximum": 1000,
+              "default": 20
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "number",
+              "default": 0
+            }
+          },
+          {
+            "name": "qualified",
+            "in": "query",
+            "required": false,
+            "description": "1: Qualified, 2: Needs to review, 4: Disqualified, 5 : Draft",
+            "example": "qualified : 2",
+            "schema": {
+              "type": "integer"
+            }
+          },
+          {
+            "name": "category_id",
+            "in": "query",
+            "required": false,
+            "description": "if category_id = -1, get all un-categories products",
+            "example": "category_id : 1764,34",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "keyword",
+            "in": "query",
+            "required": false,
+            "description": "search in source name or sku",
+            "example": "keyword : EM2566",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "stock",
+            "in": "query",
+            "required": false,
+            "description": "stock range",
+            "example": {
+              "stock": {
+                "stock_from": 12,
+                "stock_to": 50
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "price",
+            "in": "query",
+            "required": false,
+            "description": "price range",
+            "example": {
+              "price": {
+                "price_from": 12,
+                "price_to": 50
+              }
+            },
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "description": "allowed fields :name, stock, qualified, price, stock",
+            "example": "sort_by : stock",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "sort_asc",
+            "in": "query",
+            "required": false,
+            "description": "sort_asc: 1 = acs, -1 = desc",
+            "example": "sort_asc : 1",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "description": "tr, en, ar [default : tr]",
+            "example": "language : en",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
                     },
-                    "total": {
-                      "type": "number",
-                      "description": "total products across all pages"
+                    "products": {
+                      "$ref": "#/components/schemas/Product"
                     }
                   }
                 }
@@ -229,220 +733,44 @@
         ]
       },
       "post": {
-        "summary": "Add to my products",
+        "summary": "Send new product(s)",
         "tags": [
-          "My Products"
+          "Inventory Management"
         ],
-        "description": "Add products to my list",
+        "description": "You can send one or more products",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by /token, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Status 200",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    },
-                    "outOfStock": {
-                      "type": "array",
-                      "items": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "products"
-                ],
-                "properties": {
-                  "products": {
-                    "type": "array",
-                    "items": {
-                      "required": [
-                        "sku"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "sku": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "minItems": 1,
-                    "maxItems": 1000
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        }
-      },
-      "patch": {
-        "summary": "Bulk update products",
-        "tags": [
-          "My Products"
-        ],
-        "description": "Update externalUrl, externalId and variations.error",
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "array",
-                "items": {
                   "required": [
-                    "sku"
+                    "count",
+                    "products"
                   ],
                   "type": "object",
                   "properties": {
-                    "sku": {
-                      "type": "string"
+                    "count": {
+                      "type": "number",
+                      "description": "Total number of created products"
                     },
-                    "externalUrl": {
-                      "type": "string"
-                    },
-                    "externalId": {
-                      "type": "string"
-                    },
-                    "error": {
+                    "products": {
                       "type": "array",
                       "items": {
-                        "type": "string"
+                        "$ref": "#/components/schemas/Product"
                       }
-                    },
-                    "variations": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "sku": {
-                            "type": "string"
-                          },
-                          "externalId": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        }
-      }
-    },
-    "/catalog/products/count": {
-      "get": {
-        "summary": "Products Count",
-        "tags": [
-          "My Products"
-        ],
-        "description": "Get in stock products count",
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "total": {
-                      "type": "number"
                     }
                   }
                 }
@@ -451,45 +779,93 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "500": {
-            "description": "Internal  Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "security": [
           {
             "bearerAuth": []
           }
-        ]
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Body"
+        }
+      },
+      "put": {
+        "summary": "Update Products",
+        "tags": [
+          "Inventory Management"
+        ],
+        "description": "Batch update products by SKU, you should send** Variants, attributes, url, Qualified status**. you can update one or more products, just send an array.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by /token, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Status 200",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "required": [
+                    "count",
+                    "products"
+                  ],
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "number"
+                    },
+                    "products": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Product"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/UnauthorizedErrorToken"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Body"
+        }
       }
     },
     "/catalog/products/{sku}": {
       "get": {
         "summary": "Get product by SKU",
         "tags": [
-          "My Products"
+          "Inventory Management"
         ],
-        "description": "Retrieve single product information by Product SKU. product should be under this store",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Status 200",
@@ -508,16 +884,6 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "SKU not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
           }
         },
         "security": [
@@ -527,73 +893,17 @@
         ]
       },
       "put": {
-        "summary": "Update Product",
+        "summary": "Update product by SKU",
         "tags": [
-          "My Products"
+          "Inventory Management"
         ],
-        "description": "Update imported product External IDs by SKU",
-        "parameters": [
-          {
-            "name": "sku",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
+        "description": "Update Variants, attributes, url, description, archive status, images",
         "responses": {
           "200": {
             "description": "Status 200"
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "security": [
@@ -606,36 +916,12 @@
             "application/json": {
               "schema": {
                 "type": "object",
+                "required": [
+                  "product"
+                ],
                 "properties": {
-                  "externalUrl": {
-                    "type": "string"
-                  },
-                  "externalId": {
-                    "type": "number"
-                  },
-                  "variations": {
-                    "type": "array",
-                    "items": {
-                      "required": [
-                        "sku"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "sku": {
-                          "type": "string"
-                        },
-                        "externalId": {
-                          "type": "number"
-                        }
-                      }
-                    },
-                    "minItems": 1
-                  },
-                  "error": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    }
+                  "product": {
+                    "$ref": "#/components/schemas/Product"
                   }
                 }
               }
@@ -644,72 +930,11 @@
           "required": true
         }
       },
-      "delete": {
-        "summary": "Delete product by SKU",
-        "tags": [
-          "My Products"
-        ],
-        "description": "Delete Product by Product SKU from store. product should be under this store",
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "status": "success",
-                      "message": "Product has been deleted.",
-                      "sku": "47EE3550-B619"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
       "parameters": [
         {
           "name": "sku",
           "in": "path",
           "required": true,
-          "description": "Identifier of the Task",
-          "example": "47ee3550-b619",
           "schema": {
             "type": "string"
           }
@@ -718,26 +943,37 @@
     },
     "/catalog/categories": {
       "get": {
-        "summary": "Get list of categories",
+        "summary": "get all categories",
         "tags": [
-          "Products"
+          "Inventory Management"
         ],
-        "description": "Get all categories related to my products.",
         "parameters": [
           {
             "name": "parentId",
             "in": "query",
             "required": false,
+            "description": "Parent category Id",
             "schema": {
               "type": "number"
             }
           },
           {
-            "name": "treeNodeLevel",
+            "name": "level",
             "in": "query",
             "required": false,
+            "description": "Category level",
             "schema": {
               "type": "number"
+            }
+          },
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
             }
           }
         ],
@@ -759,26 +995,6 @@
                       }
                     }
                   }
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "count": 123,
-                      "categories": [
-                        {
-                          "id": 4857,
-                          "name": {
-                            "tr": "Ayakkabı",
-                            "en": "Shoes",
-                            "ar": "حذاء"
-                          },
-                          "parentId": 455,
-                          "productsCount": 100,
-                          "treeNodeLevel": 1
-                        }
-                      ]
-                    }
-                  }
                 }
               }
             }
@@ -796,32 +1012,20 @@
     },
     "/orders": {
       "get": {
-        "summary": "Get Order(s)",
+        "summary": "Get all orders",
         "tags": [
-          "Orders"
+          "Order Management"
         ],
-        "description": "To get all the order info you could use get order by id end-point",
+        "description": "Knawat creating orders to suppliers in daily bases, here all orders will be listed.",
         "parameters": [
           {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "description": "Size of the page to retrieve.",
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
             "schema": {
-              "type": "number",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 10
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number",
-              "minimum": 1,
-              "default": 1
+              "type": "string"
             }
           }
         ],
@@ -831,29 +1035,12 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": {
-                        "type": "string"
-                      },
-                      "status": {
-                        "type": "string"
-                      },
-                      "createDate": {
-                        "type": "string",
-                        "format": "date"
-                      },
-                      "updateDate": {
-                        "type": "string",
-                        "format": "date"
-                      },
-                      "total": {
-                        "type": "number"
-                      },
-                      "knawat_order_status": {
-                        "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "orders": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
                       }
                     }
                   }
@@ -870,145 +1057,25 @@
             "bearerAuth": []
           }
         ]
-      },
-      "post": {
-        "summary": "Create order",
-        "tags": [
-          "Orders"
-        ],
-        "responses": {
-          "200": {
-            "description": "Success",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "errorCode": 404,
-                      "errorMessage": "SKU(s) out of stock.",
-                      "data": {
-                        "outOfStock": [
-                          "sku1",
-                          "sku2"
-                        ]
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "428": {
-            "description": "Status 428",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "description": "```\n{\n              errors: [\n                {\n                  status: 'fail',\n                  message: 'No Billing Address Or Address Missing Data. Your order failed!',\n                  solution: `Please fill on your store billing address from here: https://app.knawat.com/settings/store`\n                }\n              ]\n            }\n```",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "required": [
-                          "message",
-                          "solution",
-                          "status"
-                        ],
-                        "type": "object",
-                        "properties": {
-                          "status": {
-                            "type": "string",
-                            "enum": [
-                              "fail"
-                            ]
-                          },
-                          "message": {
-                            "type": "string"
-                          },
-                          "solution": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          },
-                          "status": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "order"
-                ],
-                "properties": {
-                  "order": {
-                    "$ref": "#/components/schemas/Order"
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        }
       }
     },
-    "/orders/{order_id}": {
+    "/orders/{id}": {
       "get": {
-        "summary": "Order by id",
+        "summary": "Get order by id",
         "tags": [
-          "Orders"
+          "Order Management"
+        ],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
         ],
         "responses": {
           "200": {
@@ -1019,23 +1086,10 @@
                   "type": "object",
                   "properties": {
                     "order": {
-                      "$ref": "#/components/schemas/Order"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Status 400",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "description": "There is an error"
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Order"
+                      }
                     }
                   }
                 }
@@ -1044,23 +1098,6 @@
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "errorMessage": "Order not found."
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1072,64 +1109,40 @@
       "put": {
         "summary": "Update order",
         "tags": [
-          "Orders"
+          "Order Management"
         ],
-        "description": "Update order by id",
+        "description": "Suppliers can send message or shipping info in case order in processing phase.",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "description": "Token provided by <a href=\"#operation_get_token\">/token</a>, if token 12345",
+            "example": "Bearer 12345",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Status 200",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/OrderResponse"
+                  "type": "object",
+                  "description": "Return updated order",
+                  "properties": {
+                    "order": {
+                      "$ref": "#/components/schemas/Order"
+                    }
+                  }
                 }
               }
             }
           },
           "401": {
             "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Error"
-                },
-                "examples": {
-                  "response": {
-                    "value": {
-                      "errorCode": 404,
-                      "errorMessage": "Order not found.",
-                      "data": {}
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "object",
-                      "properties": {
-                        "message": {
-                          "type": "string"
-                        },
-                        "status": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
           }
         },
         "security": [
@@ -1142,673 +1155,15 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "id",
-                  "order"
-                ],
                 "properties": {
-                  "id": {
-                    "type": "string"
-                  },
                   "order": {
                     "$ref": "#/components/schemas/Order"
                   }
-                },
-                "description": "Order Confirmation"
+                }
               }
             }
           },
           "required": true
-        }
-      },
-      "delete": {
-        "summary": "Cancel order",
-        "tags": [
-          "Orders"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/OrderResponse"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          },
-                          "status": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "order_id",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/stores/me": {
-      "get": {
-        "summary": "My Store info",
-        "tags": [
-          "Stores"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Store"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/stores": {
-      "get": {
-        "summary": "All Stores",
-        "tags": [
-          "Stores",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "filter",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Store"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "Create new store",
-        "tags": [
-          "Stores",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Store"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/Store"
-        }
-      }
-    },
-    "/stores/{url}": {
-      "get": {
-        "summary": "Get Store by url",
-        "tags": [
-          "Stores",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Store"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "put": {
-        "summary": "Update Store by URL",
-        "tags": [
-          "Stores",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Store"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "errors": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "message": {
-                            "type": "string"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/Store"
-        }
-      },
-      "parameters": [
-        {
-          "name": "url",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/products": {
-      "get": {
-        "summary": "Get all Knawat Products",
-        "tags": [
-          "Products",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      }
-    },
-    "/products/{sku}": {
-      "get": {
-        "summary": "Get Product by SKU",
-        "tags": [
-          "Products",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200"
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "sku",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/currencies/{currencyCode}": {
-      "get": {
-        "summary": "Get Currency By Code",
-        "tags": [
-          "Currencies",
-          "Enterprise Only"
-        ],
-        "description": "Gets currency code, name and rate",
-        "parameters": [
-          {
-            "name": "currencyCode",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "minLength": 3,
-              "maxLength": 3
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Currency"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "404": {
-            "description": "Status 404"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "parameters": [
-        {
-          "name": "currencyCode",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/currencies": {
-      "get": {
-        "summary": "Get Currencies",
-        "tags": [
-          "Currencies",
-          "Enterprise Only"
-        ],
-        "description": "Get all currencies with names, code and rates info",
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Currency"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      }
-    },
-    "/shipment": {
-      "get": {
-        "summary": "Get All Shipment Policies",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/ShipmentPolicy"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "Insert Shipment Policy",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShipmentPolicy"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/ShipmentPolicy"
-        }
-      }
-    },
-    "/shipment/{id}": {
-      "get": {
-        "summary": "Get Shipment Policy By ID",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShipmentPolicy"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "put": {
-        "summary": "Update Shipment Policy",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ShipmentPolicy"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "$ref": "#/components/requestBodies/ShipmentPolicy"
         }
       },
       "parameters": [
@@ -1817,578 +1172,20 @@
           "in": "path",
           "required": true,
           "schema": {
-            "type": "string"
+            "type": "number"
           }
         }
       ]
-    },
-    "/shipment/rules": {
-      "get": {
-        "summary": "Get Shipment Cost",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "country",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string",
-              "minLength": 2,
-              "maxLength": 2
-            }
-          },
-          {
-            "name": "weight",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "price",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "number"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "required": [
-                    "cost",
-                    "courier",
-                    "duration"
-                  ],
-                  "type": "object",
-                  "properties": {
-                    "courier": {
-                      "type": "string"
-                    },
-                    "cost": {
-                      "type": "number"
-                    },
-                    "duration": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      }
-    },
-    "/shipment/couriers": {
-      "get": {
-        "summary": "Get All Couriers",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "country",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "minLength": 2,
-              "maxLength": 2
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      }
-    },
-    "/logs": {
-      "get": {
-        "summary": "Get Logs",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "parameters": [
-          {
-            "name": "topic",
-            "in": "query",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "topicId",
-            "in": "query",
-            "required": false,
-            "description": "Required if no storeId",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "storeId",
-            "in": "query",
-            "required": false,
-            "description": "Required if no topicId",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "logLevel",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "info",
-                "debug",
-                "warn",
-                "error"
-              ]
-            }
-          },
-          {
-            "name": "sort",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": [
-                "asc",
-                "desc"
-              ]
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number",
-              "minimum": 1,
-              "maximum": 500,
-              "default": 10
-            }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number",
-              "default": 1
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Log"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "404": {
-            "description": "Status 404",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "message": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ]
-      },
-      "post": {
-        "summary": "Add Log",
-        "tags": [
-          "Shipment",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "success"
-                      ]
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "id": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          },
-          "500": {
-            "description": "Status 500",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "status": {
-                      "type": "string",
-                      "enum": [
-                        "failed"
-                      ]
-                    },
-                    "message": {
-                      "type": "string"
-                    },
-                    "code": {
-                      "type": "string"
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Log"
-              }
-            }
-          },
-          "required": true
-        }
-      }
-    },
-    "/invoices": {
-      "get": {
-        "summary": "List Invoices",
-        "tags": [
-          "Invoices"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "reference_number",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "invoice_number",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "invoices": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Invoice"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
-    },
-    "/payments/{storeId}": {
-      "post": {
-        "summary": "Add Payment",
-        "description": "This service available for some Enterprise subscriptions Only",
-        "tags": [
-          "Payments",
-          "Enterprise Only"
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Payment"
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorBasic"
-          }
-        },
-        "security": [
-          {
-            "basicAuth": []
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "amount",
-                  "payment_mode"
-                ],
-                "properties": {
-                  "payment_mode": {
-                    "type": "string"
-                  },
-                  "amount": {
-                    "type": "number"
-                  },
-                  "invoices": {
-                    "type": "array",
-                    "items": {
-                      "required": [
-                        "amount_applied",
-                        "invoice_id"
-                      ],
-                      "type": "object",
-                      "properties": {
-                        "amount_applied": {
-                          "type": "number"
-                        },
-                        "invoice_id": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  },
-                  "account_id": {
-                    "type": "string"
-                  },
-                  "bank_charges": {
-                    "type": "string",
-                    "description": "Requires account_id when used"
-                  }
-                }
-              }
-            }
-          },
-          "required": true
-        }
-      },
-      "parameters": [
-        {
-          "name": "storeId",
-          "in": "path",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-    },
-    "/payments": {
-      "get": {
-        "summary": "List Payments",
-        "tags": [
-          "Payments"
-        ],
-        "parameters": [
-          {
-            "name": "page",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "limit",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "number"
-            }
-          },
-          {
-            "name": "reference_number",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "name": "payment_mode",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Status 200",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "payments": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Payment"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/UnauthorizedErrorToken"
-          }
-        },
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ]
-      }
     }
   },
   "servers": [
     {
       "description": "Production Server",
-      "url": "https://mp.knawat.io/api"
+      "url": "https://suppliers.knawat.io/api"
     },
     {
       "description": "Sandbox Server",
-      "url": "https://dev.mp.knawat.io/api"
+      "url": "https://dev.suppliers.knawat.io/api"
     }
   ],
   "components": {
@@ -2408,21 +1205,24 @@
       }
     },
     "requestBodies": {
-      "Store": {
+      "Body": {
         "content": {
           "application/json": {
             "schema": {
-              "$ref": "#/components/schemas/Store"
-            }
-          }
-        },
-        "required": true
-      },
-      "ShipmentPolicy": {
-        "content": {
-          "application/json": {
-            "schema": {
-              "$ref": "#/components/schemas/ShipmentPolicy"
+              "type": "object",
+              "required": [
+                "products"
+              ],
+              "properties": {
+                "products": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Product"
+                  },
+                  "minItems": 1,
+                  "maxItems": 100
+                }
+              }
             }
           }
         },
@@ -2445,80 +1245,211 @@
       "Error": {
         "type": "object",
         "required": [
-          "message"
+          "errorCode",
+          "errorMessage"
         ],
         "properties": {
-          "status": {
+          "errorCode": {
+            "type": "number"
+          },
+          "errorMessage": {
             "type": "string"
           },
-          "message": {
-            "type": "string"
+          "data": {
+            "type": "object"
           }
         },
-        "description": "This general error structure is used throughout this API.",
         "example": {
-          "message": "SKU(s) out of stock."
+          "errorCode": 404,
+          "errorMessage": "SKU(s) out of stock.",
+          "data": {}
+        }
+      },
+      "Supplier": {
+        "type": "object",
+        "required": [
+          "address",
+          "contacts",
+          "created_date",
+          "currency",
+          "id",
+          "languages",
+          "name",
+          "state",
+          "updated_date",
+          "url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identification to represent a supplier",
+            "pattern": "READ-ONLY"
+          },
+          "state": {
+            "type": "string",
+            "description": "Supplier status, check <a href=\"#text_apply_as_supplier\">Apply as supplier</a>",
+            "enum": [
+              "0",
+              "1",
+              "-1"
+            ],
+            "pattern": "READ-ONLY"
+          },
+          "name": {
+            "type": "string",
+            "description": "Supplier name"
+          },
+          "project_key": {
+            "type": "string",
+            "description": "No spaces, no special characters",
+            "default": "We cleanup name"
+          },
+          "url": {
+            "type": "string",
+            "description": "Supplier online store URL"
+          },
+          "logo": {
+            "type": "string",
+            "description": "PNG alpha image, recommended 512*512px"
+          },
+          "currency": {
+            "type": "string",
+            "description": "The default currency for products price",
+            "minLength": 3,
+            "maxLength": 3
+          },
+          "languages": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "example": "en"
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The date the supplier was created"
+          },
+          "updated_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "The last date the supplier was updated.",
+            "example": "READ-ONLY"
+          },
+          "address": {
+            "type": "array",
+            "description": "One or more address for supplier warehouses",
+            "items": {
+              "type": "object"
+            }
+          },
+          "contacts": {
+            "type": "array",
+            "description": "This object contains an array of contact persons information like\ndepartment, name, title, firstname, lastname,telephone, fax, mobile, website",
+            "items": {
+              "type": "object"
+            }
+          }
+        },
+        "example": {
+          "id": "59afe7",
+          "state": "review",
+          "project_key": "pasionwear",
+          "name": "Pasionwear",
+          "logo": "https://example.com.tr/logo.png",
+          "url": "https://example.com.tr",
+          "currency": "TRY",
+          "languages": [
+            "tr",
+            "en"
+          ],
+          "created_date": "2017-09-06T12:19:04.431+0000",
+          "updated_date": "2017-09-06T12:19:04.431+0000",
+          "address": [
+            {
+              "line1": "Halaskargazi Mahallesi, D10 KAT5",
+              "line2": "Rumeli Cd. 35-37",
+              "post_code": "34371",
+              "city": "ŞIŞLI",
+              "state": "İSTANBUL",
+              "country": "TR"
+            }
+          ],
+          "contacts": [
+            {
+              "department": "operations",
+              "name": "John Doe",
+              "email": "john.doe@examplestore.com.tr",
+              "phone": "+90215654356"
+            }
+          ],
+          "excluded_brands": [],
+          "excluded_attributes": [],
+          "excluded_categories": []
         }
       },
       "Product": {
         "type": "object",
         "required": [
-          "attributes",
+          "barcode",
+          "categories",
           "description",
           "images",
-          "last_stock_check",
           "name",
           "sku",
-          "supplier",
+          "supplierId",
+          "url",
           "variations"
         ],
         "properties": {
           "sku": {
-            "type": "string",
-            "description": "Product ID"
+            "type": "string"
           },
-          "supplier": {
-            "type": "number",
-            "description": "Supplier ref"
+          "barcode": {
+            "type": "string"
           },
-          "name": {
-            "required": [
-              "tr"
-            ],
-            "type": "object",
-            "properties": {
-              "tr": {
-                "type": "string"
-              },
-              "ar": {
-                "type": "string"
-              },
-              "en": {
-                "type": "string"
-              }
-            }
+          "supplierId": {
+            "type": "string"
           },
-          "description": {
-            "required": [
-              "tr"
-            ],
-            "type": "object",
-            "properties": {
-              "tr": {
-                "type": "string"
-              },
-              "en": {
-                "type": "string"
-              },
-              "ar": {
-                "type": "string"
-              }
-            }
-          },
-          "last_stock_check": {
+          "created_date": {
             "type": "string",
             "format": "date-time",
-            "example": "2016-02-28T16:41:41.090Z"
+            "example": "READ-ONLY"
+          },
+          "updated_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Automatically generated, last time you updated this product",
+            "example": "READ-ONLY"
+          },
+          "last_checked": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Last date you checked the source warehouse"
+          },
+          "url": {
+            "type": "string",
+            "description": "Product source url, for QA peruse"
+          },
+          "qualified": {
+            "type": "number",
+            "description": "1: Qualified \n2: Needs to review\n4: Disqualified",
+            "default": 2,
+            "example": "READ-ONLY"
+          },
+          "name": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          },
+          "description": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          },
+          "description_short": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          },
+          "brand": {
+            "$ref": "#/components/schemas/LanguagesObject"
           },
           "images": {
             "type": "array",
@@ -2536,9 +1467,9 @@
           },
           "attributes": {
             "type": "array",
-            "description": "Any other information about this product, materials, gender … etc",
+            "description": "Any other information about this product, materials, gender ... etc",
             "items": {
-              "$ref": "#/components/schemas/Attribute"
+              "$ref": "#/components/schemas/ProductAttribute"
             }
           },
           "variations": {
@@ -2546,129 +1477,155 @@
             "description": "Product variations",
             "items": {
               "$ref": "#/components/schemas/ProductVariation"
+            },
+            "minItems": 1,
+            "maxItems": 100
+          }
+        },
+        "example": {
+          "products": [
+            {
+              "sku": "4646030019238",
+              "barcode": "1234567890",
+              "url": "https://example.com/product.php?id=123",
+              "name": {
+                "tr": "DAR KALIP PEMBE GÖMLEK",
+                "en": "Slimline Pink Shirt"
+              },
+              "description": {
+                "tr": "Some Turkish text here, html allowed",
+                "en": "Some English text here, html allowed"
+              },
+              "brand": {
+                "tr": "Defacto",
+                "en": "Defacto"
+              },
+              "images": [
+                "https://cdnp4.knawat.com/buyuk/788f8a17-d5d8-4ccb-b218-9e428b199228.jpg",
+                "https://cdnp4.knawat.com/buyuk/d8f20963-1772-45af-849d-da84e66d9a95.jpg",
+                "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg"
+              ],
+              "categories": [
+                {
+                  "_id": 74962,
+                  "name": {
+                    "en": "Bags, Handbags & Cases",
+                    "ar": "حقائب وحقائب يد وحقائب صغيرة"
+                  },
+                  "parentId": 182059,
+                  "productsCount": 280,
+                  "treeNodeLevel": 4
+                },
+                {
+                  "_id": 182059,
+                  "name": {
+                    "en": "Vintage Accessories",
+                    "ar": "أكسسورات عتيقة"
+                  },
+                  "parentId": 175759,
+                  "productsCount": 282,
+                  "treeNodeLevel": 3
+                }
+              ],
+              "attributes": [
+                {
+                  "name": {
+                    "tr": "Beden",
+                    "en": "Size"
+                  },
+                  "options": [
+                    {
+                      "tr": "S",
+                      "en": "S"
+                    },
+                    {
+                      "tr": "M",
+                      "en": "M"
+                    }
+                  ]
+                }
+              ],
+              "variations": [
+                {
+                  "sku": "4646030019238-S",
+                  "barcode": "1234567890123",
+                  "sale_price": 9.74,
+                  "market_price": 11.99,
+                  "weight": 0.5,
+                  "quantity": 123,
+                  "attributes": [
+                    {
+                      "name": {
+                        "tr": "Beden",
+                        "en": "Size"
+                      },
+                      "option": {
+                        "tr": "S",
+                        "en": "S"
+                      }
+                    }
+                  ]
+                },
+                {
+                  "sku": "4646030019238-M",
+                  "barcode": "1234567890124",
+                  "sale_price": 9.74,
+                  "market_price": 11.99,
+                  "weight": 0.5,
+                  "quantity": 321,
+                  "attributes": [
+                    {
+                      "name": {
+                        "tr": "Beden",
+                        "en": "Size"
+                      },
+                      "option": {
+                        "tr": "M",
+                        "en": "M"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      },
+      "ProductAttribute": {
+        "type": "object",
+        "required": [
+          "options"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Knawat attribute id required or attribute name"
+          },
+          "name": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          },
+          "options": {
+            "type": "array",
+            "description": "At least one option in one language required",
+            "items": {
+              "$ref": "#/components/schemas/LanguagesObject"
             }
           }
         },
-        "description": "An object that represents a Product.",
         "example": {
-          "sku": "4646030019238",
+          "id": "1",
           "name": {
-            "tr": "DAR KALIP PEMBE GÖMLEK",
-            "ar": "قميص وردي قصير",
-            "en": "Slimline Pink Shirt"
+            "tr": "Beden",
+            "en": "Size"
           },
-          "description": {
-            "tr": "%100 Pamuk<br>*Cep Detay <br>*Uzun Katlanabilir Kol<br>*Önden Düğmeli<br>*Yanları Düğmeli <br>*Dar Kalıp <br>*Boy Uzunluğu:63 cm<br>Numune Bedeni: 36/S/1<br>Modelin Ölçüleri: Boy:1,76, Göğüs:86, Bel:60, Kalça: 91",
-            "en": "<ul><li>100% Cotton</li><li>*Pocket Detailed</li><li>*Long Layered Sleeves</li><li>*Front Buttons</li><li>*Buttons on Sides</li><li>*Narrow Cut</li><li>*Length:63 cm</li><li>Sample Size: 36/S/1</li><li>Model's Measurements: Height:1,76, Chest:86, Waist:60, Hip: 91</li></ul>",
-            "ar": "<ul><li>%100 قطن</li><li>مزين بجيب</li><li>بكم طويل قابل للازالة</li><li>بأزرار من الامام</li><li>بأزرار من الجوانب</li><li>سليم فت</li><li>الطول:63 سم</li><li>مقاس الجسم: 36/S/1</li><li>قياسات العارض: الطول:1,76, الصدر:86, الوسط:60, الخصر: 91</li></ul>"
-          },
-          "last_stock_check": "2018-03-15T06:53:06.949Z",
-          "supplier": 1615,
-          "categories": [
+          "options": [
             {
-              "id": 4856,
-              "name": {
-                "tr": "Outdoors / Kadın",
-                "en": "Outdoors / Women",
-                "ar": "أوت دور / نسائي"
-              }
-            }
-          ],
-          "images": [
-            "https://cdnp4.knawat.com/buyuk/788f8a17-d5d8-4ccb-b218-9e428b199228.jpg",
-            "https://cdnp4.knawat.com/buyuk/d8f20963-1772-45af-849d-da84e66d9a95.jpg",
-            "https://cdnp4.knawat.com/buyuk/fa36c9d4-51c4-434f-9ffd-94fb343ce0d8.jpg"
-          ],
-          "attributes": [
-            {
-              "id": 1,
-              "name": {
-                "tr": "Beden",
-                "en": "Size",
-                "ar": "مقاس"
-              },
-              "options": [
-                {
-                  "tr": "M",
-                  "en": "M",
-                  "ar": "M"
-                },
-                {
-                  "tr": "XXL",
-                  "en": "XXL",
-                  "ar": "XXL"
-                }
-              ]
+              "tr": "S",
+              "en": "S"
             },
             {
-              "id": 2,
-              "name": {
-                "tr": "Renk",
-                "en": "Color",
-                "ar": "لون"
-              },
-              "options": [
-                {
-                  "tr": "Kırmızı",
-                  "en": "Red",
-                  "ar": "احمر"
-                }
-              ]
-            },
-            {
-              "id": 3,
-              "name": "Material",
-              "options": [
-                "15% Cotton",
-                "25% Polyester"
-              ]
-            }
-          ],
-          "variations": [
-            {
-              "sku": "4646030019238-36",
-              "price": 9.74,
-              "market_price": 11.99,
-              "weight": 0.5,
-              "quantity": 10,
-              "attributes": [
-                {
-                  "id": 1,
-                  "name": {
-                    "tr": "Beden",
-                    "en": "Size",
-                    "ar": "مقاس"
-                  },
-                  "option": {
-                    "tr": "M",
-                    "en": "M",
-                    "ar": "M"
-                  }
-                }
-              ]
-            },
-            {
-              "sku": "4646030019238-38",
-              "price": 9.74,
-              "market_price": 11.99,
-              "weight": 0.5,
-              "quantity": 10,
-              "barcode": null,
-              "attributes": [
-                {
-                  "id": 1,
-                  "name": {
-                    "tr": "Beden",
-                    "en": "Size",
-                    "ar": "مقاس"
-                  },
-                  "option": {
-                    "tr": "XXL",
-                    "en": "XXL",
-                    "ar": "XXL"
-                  }
-                }
-              ]
+              "tr": "M",
+              "en": "M"
             }
           ]
         }
@@ -2676,7 +1633,7 @@
       "ProductVariation": {
         "type": "object",
         "required": [
-          "cost_price",
+          "attributes",
           "quantity",
           "sale_price",
           "sku",
@@ -2687,197 +1644,175 @@
             "type": "string",
             "description": "Variation id"
           },
-          "cost_price": {
-            "type": "number",
-            "description": "Your cost, Knawat sale product with this price"
+          "barcode": {
+            "type": "string",
+            "description": "Variation barcode"
           },
           "sale_price": {
             "type": "number",
-            "description": "This is the listed price on your store"
+            "description": "Your sale price, Knawat cost, This is how much Knawat will pay you"
           },
           "market_price": {
             "type": "number",
-            "description": "Price before the discount"
-          },
-          "weight": {
-            "type": "number",
-            "description": "Product weight"
+            "description": "How much we have to sell this product?"
           },
           "quantity": {
             "type": "number"
           },
+          "weight": {
+            "type": "number",
+            "description": "Product weight, required for international shipping"
+          },
           "attributes": {
             "type": "array",
+            "description": "At least one variation should be here, maybe size = STD if one size",
             "items": {
-              "$ref": "#/components/schemas/Attribute"
+              "$ref": "#/components/schemas/ProductVariationAttribute"
             }
           }
         },
-        "example": "{\n  \"sku\": \"4646030019238-36\",\n  \"cost_price\": 5.22,\n  \"sale_price\": 9.74,\n  \"market_price\": 11.99,\n  \"weight\": 0.5,\n  \"quantity\": 10,\n  \"attributes\": [\n    {\n      \"id\": 1,\n      \"name\": {\n        \"tr\": \"Beden\",\n        \"en\": \"Size\",\n        \"ar\": \"مقاس\"\n      },\n      \"option\": { \"tr\": \"M\", \"en\": \"M\", \"ar\": \"M\" }\n    }\n  ]\n}\n"
+        "example": {
+          "sku": "4646030019238-M",
+          "barcode": "1234567890124",
+          "sale_price": 9.74,
+          "market_price": 11.99,
+          "quantity": 10,
+          "weight": 0.5,
+          "attributes": [
+            {
+              "name": {
+                "tr": "Beden",
+                "en": "Size"
+              },
+              "option": {
+                "tr": "M",
+                "en": "M"
+              }
+            }
+          ]
+        }
       },
-      "Attribute": {
+      "ProductVariationAttribute": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Knawat attribute id required or attribute name"
+          },
+          "name": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          },
+          "option": {
+            "$ref": "#/components/schemas/LanguagesObject"
+          }
+        },
+        "example": {
+          "name": {
+            "tr": "Beden",
+            "en": "Size"
+          },
+          "option": {
+            "tr": "M",
+            "en": "M"
+          }
+        }
+      },
+      "Category": {
         "type": "object",
         "required": [
+          "id"
+        ],
+        "properties": {
+          "id": {
+            "type": "number"
+          }
+        },
+        "example": {
+          "_id": 11450,
+          "name": {
+            "en": "Clothing, Shoes & Accessories",
+            "ar": "ملابس وأحذية وإكسسورات"
+          },
+          "productsCount": 0,
+          "treeNodeLevel": 1
+        }
+      },
+      "LanguagesObject": {
+        "type": "object",
+        "properties": {
+          "tr": {
+            "type": "string"
+          },
+          "en": {
+            "type": "string"
+          },
+          "ar": {
+            "type": "string"
+          }
+        },
+        "description": "One language at least required",
+        "example": {
+          "tr": "Ayakkabı / Kadın",
+          "en": "Shoes / Women",
+          "ar": "حذاء / نسائي"
+        }
+      },
+      "Order": {
+        "type": "object",
+        "required": [
+          "created_date",
           "id",
-          "name",
-          "option"
+          "items",
+          "po_status"
         ],
         "properties": {
           "id": {
             "type": "number"
           },
-          "name": {
-            "required": [
-              "tr"
-            ],
-            "type": "object",
-            "properties": {
-              "tr": {
-                "type": "string"
-              },
-              "en": {
-                "type": "string"
-              },
-              "ar": {
-                "type": "string"
-              }
-            }
-          },
-          "option": {
-            "required": [
-              "tr"
-            ],
-            "type": "object",
-            "properties": {
-              "tr": {
-                "type": "string"
-              },
-              "en": {
-                "type": "string"
-              },
-              "ar": {
-                "type": "string"
-              }
-            }
-          }
-        },
-        "example": "{\n  \"id\": 1,\n  \"name\": {\n    \"tr\": \"Beden\",\n    \"en\": \"Size\",\n    \"ar\": \"مقاس\"\n  },\n  \"option\": { \"tr\": \"M\", \"en\": \"M\", \"ar\": \"M\" }\n}\n"
-      },
-      "Category": {
-        "type": "array",
-        "items": {
-          "required": [
-            "id",
-            "name"
-          ],
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "number"
-            },
-            "name": {
-              "required": [
-                "productsCount",
-                "treeNodeLevel"
-              ],
-              "type": "object",
-              "properties": {
-                "tr": {
-                  "type": "string"
-                },
-                "en": {
-                  "type": "string"
-                },
-                "ar": {
-                  "type": "string"
-                },
-                "treeNodeLevel": {
-                  "type": "number"
-                },
-                "productsCount": {
-                  "type": "number"
-                },
-                "parentId": {
-                  "type": "number"
-                }
-              }
-            }
-          }
-        },
-        "example": [
-          {
-            "id": 4857,
-            "name": {
-              "tr": "Ayakkabı",
-              "en": "Shoes",
-              "ar": "حذاء"
-            },
-            "parentId": 32423,
-            "productsCount": 352,
-            "treeNodeLevel": 1
-          },
-          {
-            "id": 4859,
-            "name": {
-              "tr": "Ayakkabı / Kadın",
-              "en": "Shoes / Women",
-              "ar": "حذاء / نسائي"
-            },
-            "parentId": 2435,
-            "productsCount": 456,
-            "treeNodeLevel": 2
-          }
-        ]
-      },
-      "Order": {
-        "type": "object",
-        "required": [
-          "items",
-          "orderNumber",
-          "shipping",
-          "status"
-        ],
-        "properties": {
-          "id": {
+          "po_status": {
             "type": "string",
-            "description": "Order External ID"
-          },
-          "status": {
-            "type": "string",
+            "description": "More info <a href=\"#text_po_statuses\">here</a>",
+            "default": "reserved",
             "enum": [
-              "pending",
-              "processing",
-              "cancelled"
+              "reserved",
+              "sent",
+              "purchase",
+              "done",
+              "canceled"
             ]
           },
-          "items": {
-            "type": "array",
-            "items": {
-              "required": [
-                "quantity",
-                "sku"
-              ],
-              "type": "object",
-              "properties": {
-                "quantity": {
-                  "type": "number",
-                  "minimum": 1,
-                  "maximum": 10
-                },
-                "sku": {
-                  "type": "string"
-                }
-              }
-            },
-            "minItems": 1
+          "wh_status": {
+            "type": "string",
+            "description": "More info <a href=\"#text_wh_statuses\">here</a>",
+            "enum": [
+              "draft",
+              "cancel",
+              "assigned",
+              "done"
+            ]
+          },
+          "created_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISODate",
+            "example": "2018-01-19T12:00:00.000+3000"
+          },
+          "modified_date": {
+            "type": "string",
+            "format": "date-time",
+            "description": "ISODate",
+            "example": "2018-01-19T12:00:00.000+3000"
           },
           "shipping": {
             "required": [
               "address_1",
+              "address_2",
               "city",
+              "company",
               "country",
               "first_name",
               "last_name",
+              "postcode",
               "state"
             ],
             "type": "object",
@@ -2907,579 +1842,67 @@
                 "type": "string"
               },
               "country": {
-                "type": "string",
-                "description": "ISO 3166-1 alpha-2 codes are two-letter country codes",
-                "minLength": 2,
-                "maxLength": 2,
-                "example": "TR"
-              },
-              "email": {
-                "type": "string"
-              },
-              "phone": {
                 "type": "string"
               }
             }
           },
-          "invoice_url": {
+          "items": {
+            "type": "array",
+            "items": {
+              "required": [
+                "quantity",
+                "sku"
+              ],
+              "type": "object",
+              "properties": {
+                "quantity": {
+                  "type": "number",
+                  "minimum": 1
+                },
+                "sku": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "shipping_carrier": {
             "type": "string",
-            "description": "Optional invoice to print with the order"
+            "default": "DHL, Fedex"
           },
-          "notes": {
+          "tracking_number": {
             "type": "string"
           },
-          "shipping_method": {
-            "type": "string"
-          },
-          "orderNumber": {
-            "type": "string"
-          },
-          "trackingNumber": {
-            "type": "string"
+          "supplier_message": {
+            "type": "string",
+            "description": "Supplier can send here whatever he wants to our warehouse"
           }
         },
         "example": {
-          "id": "12763",
-          "status": "pending",
+          "id": 1001,
+          "po_status": "reserved",
+          "wh_status": "draft",
+          "created_date": "2018-01-19T12:00:00.000+3000",
+          "modified_date": "2018-01-19T12:00:00.000+3000",
+          "shipping": {
+            "first_name": "Knawat",
+            "last_name": "LLC",
+            "company": "Knawat, LLC",
+            "address_1": "Our warehouse address",
+            "address_2": "",
+            "city": "example data",
+            "state": "Istanbul",
+            "postcode": "57555",
+            "country": "TR"
+          },
           "items": [
             {
-              "quantity": 1,
-              "sku": "H3576AZ17HSNM13-XS"
+              "quantity": 2,
+              "sku": "G6667AZ17SPBE137-46"
             }
           ],
-          "shipping": {
-            "first_name": "John",
-            "last_name": "Doe",
-            "company": "Knawat",
-            "address_1": "Halaskargazi Mahallesi, D10 KAT5 Cd, Rumeli Cd. 35-37",
-            "address_2": "",
-            "city": "Şişli",
-            "state": "İstanbul",
-            "postcode": "34371",
-            "country": "TR",
-            "email": "info@knawat.com",
-            "phone": "(0212) 296 11 94"
-          },
-          "invoice_url": "http://example.com/invoice.pdf",
-          "notes": "My Orders"
-        }
-      },
-      "OrderResponse": {
-        "type": "object",
-        "properties": {
-          "status": {
-            "type": "string",
-            "enum": [
-              "success",
-              "fail"
-            ]
-          },
-          "order": {
-            "$ref": "#/components/schemas/Order"
-          },
-          "warning": {
-            "type": "array",
-            "items": {
-              "required": [
-                "message"
-              ],
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "number",
-                  "example": "1102 => This items are out of stock"
-                },
-                "skus": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              }
-            }
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "required": [
-                "message",
-                "status"
-              ],
-              "type": "object",
-              "properties": {
-                "status": {
-                  "type": "string",
-                  "enum": [
-                    "fail"
-                  ]
-                },
-                "message": {
-                  "type": "string"
-                },
-                "solution": {
-                  "type": "string"
-                },
-                "code": {
-                  "type": "number",
-                  "example": "1101 => The products you ordered is not in-stock, The order has not been created!"
-                }
-              }
-            }
-          }
-        },
-        "example": {
-          "status": "success",
-          "order": {
-            "id": "3435344",
-            "...": null
-          }
-        }
-      },
-      "Store": {
-        "type": "object",
-        "required": [
-          "name",
-          "status",
-          "type",
-          "url",
-          "users"
-        ],
-        "properties": {
-          "url": {
-            "type": "string",
-            "description": "URL is the store ID",
-            "example": "https://www.example.com"
-          },
-          "name": {
-            "type": "string",
-            "minLength": 3
-          },
-          "status": {
-            "type": "string",
-            "enum": [
-              "confirmed",
-              "unconfirmed",
-              "archived",
-              "error"
-            ]
-          },
-          "type": {
-            "type": "string",
-            "description": "Lowercase only allowed",
-            "enum": [
-              "woocommerce",
-              "magento2",
-              "expandcart",
-              "opencart",
-              "shopify",
-              "csv",
-              "ebay",
-              "api",
-              "other"
-            ]
-          },
-          "created": {
-            "type": "string",
-            "format": "date"
-          },
-          "updated": {
-            "type": "string",
-            "format": "date"
-          },
-          "stock_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "stock_status": {
-            "type": "string",
-            "default": "idle",
-            "enum": [
-              "idle",
-              "in-progress"
-            ]
-          },
-          "price_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "price_status": {
-            "type": "string",
-            "default": "idle",
-            "enum": [
-              "idle",
-              "in-progress"
-            ]
-          },
-          "sale_price": {
-            "type": "number",
-            "default": 1.7,
-            "example": "1 = Same as Knawat price"
-          },
-          "compared_at_price": {
-            "type": "number",
-            "default": 2,
-            "example": "2 = Same as sale price"
-          },
-          "currency": {
-            "type": "string",
-            "description": "3 digit numeric ISO 4217 codes",
-            "minLength": 3,
-            "maxLength": 3,
-            "pattern": "^[A-Z]{3}$"
-          },
-          "consumer_key": {
-            "type": "string",
-            "default": "Auto generated"
-          },
-          "consumer_secret": {
-            "type": "string",
-            "default": "Auto generated"
-          },
-          "external_data": {
-            "type": "object",
-            "description": "Free object to save external IDs, token ... etc"
-          },
-          "internal_data": {
-            "type": "object",
-            "description": "Free object to save OMS references"
-          },
-          "users": {
-            "type": "array",
-            "description": "At least one owner should be there in the array",
-            "items": {
-              "required": [
-                "email",
-                "roles"
-              ],
-              "type": "object",
-              "properties": {
-                "email": {
-                  "type": "string"
-                },
-                "roles": {
-                  "type": "array",
-                  "items": {
-                    "type": "string",
-                    "enum": [
-                      "owner",
-                      "accounting",
-                      "products",
-                      "orders"
-                    ]
-                  },
-                  "minItems": 1,
-                  "maxItems": 4
-                }
-              }
-            }
-          },
-          "languages": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "pattern": "^[a-z]{2}-[A-Z]{2}$]"
-            },
-            "minItems": 1,
-            "maxItems": 10
-          },
-          "address": {
-            "required": [
-              "address_1",
-              "country",
-              "email",
-              "first_name",
-              "last_name"
-            ],
-            "type": "object",
-            "properties": {
-              "first_name": {
-                "type": "string",
-                "minLength": 3,
-                "pattern": "^[A-Za-z ]{3,}$"
-              },
-              "last_name": {
-                "type": "string",
-                "minLength": 3,
-                "pattern": "^[A-Za-z ]{3,}$"
-              },
-              "company": {
-                "type": "string"
-              },
-              "address_1": {
-                "type": "string",
-                "minLength": 3,
-                "pattern": "^[A-Za-z0-9 -.,]{3,}$"
-              },
-              "address_2": {
-                "type": "string",
-                "minLength": 3,
-                "pattern": "^[A-Za-z0-9 -.,]{3,}$"
-              },
-              "city": {
-                "type": "string",
-                "description": "City or Status, one of them is required"
-              },
-              "state": {
-                "type": "string",
-                "description": "City or Status, one of them is required"
-              },
-              "postcode": {
-                "type": "string"
-              },
-              "country": {
-                "type": "string",
-                "description": "ISO 3166-1 alpha-2, capital letters only",
-                "minLength": 2,
-                "maxLength": 2,
-                "pattern": "^[A-Z]{2}$"
-              },
-              "email": {
-                "type": "string"
-              },
-              "phone": {
-                "type": "string"
-              }
-            }
-          },
-          "debit": {
-            "type": "number",
-            "description": "Just with /stores/me & /stores/{url}"
-          },
-          "credit": {
-            "type": "number",
-            "description": "Just with /stores/me & /stores/{url}"
-          }
-        }
-      },
-      "Currency": {
-        "type": "object",
-        "properties": {
-          "currencyCode": {
-            "type": "string"
-          },
-          "rate": {
-            "type": "number"
-          }
-        }
-      },
-      "ShipmentPolicy": {
-        "type": "object",
-        "required": [
-          "countries",
-          "name",
-          "rules"
-        ],
-        "properties": {
-          "name": {
-            "type": "string"
-          },
-          "countries": {
-            "type": "array",
-            "items": {
-              "type": "string",
-              "minLength": 2,
-              "maxLength": 2
-            }
-          },
-          "rules": {
-            "type": "array",
-            "items": {
-              "required": [
-                "cost",
-                "courier",
-                "delivery_days_max",
-                "delivery_days_min",
-                "type",
-                "units_max",
-                "units_min"
-              ],
-              "type": "object",
-              "properties": {
-                "courier": {
-                  "type": "string"
-                },
-                "delivery_days_min": {
-                  "type": "number"
-                },
-                "delivery_days_max": {
-                  "type": "number"
-                },
-                "units_min": {
-                  "type": "number"
-                },
-                "units_max": {
-                  "type": "number"
-                },
-                "type": {
-                  "type": "string",
-                  "enum": [
-                    "weight",
-                    "price"
-                  ]
-                },
-                "cost": {
-                  "type": "number"
-                }
-              }
-            }
-          }
-        }
-      },
-      "Log": {
-        "type": "object",
-        "required": [
-          "code",
-          "topic"
-        ],
-        "properties": {
-          "topic": {
-            "type": "string"
-          },
-          "code": {
-            "type": "number",
-            "example": "100 =>  Informational status response code indicates that everything so far is OK and that the client should continue with the request or ignore it if it is already finished."
-          },
-          "topicId": {
-            "type": "string"
-          },
-          "storeId": {
-            "type": "string"
-          },
-          "timestamp": {
-            "type": "string",
-            "format": "date"
-          },
-          "message": {
-            "type": "string"
-          },
-          "logLevel": {
-            "type": "string",
-            "enum": [
-              "info",
-              "debug",
-              "warn",
-              "error"
-            ]
-          },
-          "payload": {
-            "type": "object"
-          }
-        }
-      },
-      "Invoice": {
-        "type": "object",
-        "properties": {
-          "invoice_id": {
-            "type": "string"
-          },
-          "customer_name": {
-            "type": "string"
-          },
-          "customer_id": {
-            "type": "string"
-          },
-          "status": {
-            "type": "string"
-          },
-          "invoice_number": {
-            "type": "string"
-          },
-          "reference_number": {
-            "type": "string"
-          },
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "due_date": {
-            "type": "string",
-            "format": "date"
-          },
-          "due_days": {
-            "type": "string"
-          },
-          "total": {
-            "type": "number"
-          },
-          "balance": {
-            "type": "number"
-          },
-          "created_time": {
-            "type": "string",
-            "format": "date"
-          },
-          "last_modified_time": {
-            "type": "string",
-            "format": "date"
-          },
-          "shipping_charge": {
-            "type": "number"
-          },
-          "adjustment": {
-            "type": "number"
-          }
-        }
-      },
-      "Payment": {
-        "type": "object",
-        "required": [
-          "amount",
-          "customer_id",
-          "date",
-          "payment_id",
-          "payment_mode",
-          "unused_amount"
-        ],
-        "properties": {
-          "payment_id": {
-            "type": "string"
-          },
-          "customer_id": {
-            "type": "string"
-          },
-          "payment_mode": {
-            "type": "string"
-          },
-          "amount": {
-            "type": "number"
-          },
-          "unused_amount": {
-            "type": "number"
-          },
-          "invoices": {
-            "type": "array",
-            "items": {
-              "required": [
-                "amount_applied",
-                "invoice_id"
-              ],
-              "type": "object",
-              "properties": {
-                "amount_applied": {
-                  "type": "number"
-                },
-                "invoice_id": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "bank_charges": {
-            "type": "number"
-          },
-          "date": {
-            "type": "string",
-            "format": "date"
-          },
-          "account_id": {
-            "type": "string"
-          },
-          "account_name": {
-            "type": "string"
-          }
+          "shipping_carrier": "Example Company",
+          "tracking_number": "123455",
+          "supplier_message": ""
         }
       }
     }
