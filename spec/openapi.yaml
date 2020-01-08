@@ -941,6 +941,7 @@ components:
       description: >
         Knawat provide <a href="#tag/Enterprise-Only">extra endpoints</a> for enterprise subscriptions, check <a href="https://knawat.com/plans">pricing here</a>.
       type: http
+      scheme: basic
   schemas:
     Error:
       type: object
