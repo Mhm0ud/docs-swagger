@@ -9,14 +9,14 @@ info:
     email: support@knawat.com
     url: "https://developer.knawat.com"
   license:
-    name: Knawat Copyright © - 2017 - 2019
+    name: Knawat Copyright © - 2017 - 2020
     url: "https://knawat.com/terms-and-conditions/"
 
   description: >-
     Knawat Supply API allows you to list your products on Knawat and get purchase orders, it's also allow you to set order status and shipping tracking number.
 
     ## Getting Started
-    
+
     In Knawat each supplier has a different `consumerKey` and `consumerSecret`, which you can get from your account manager. You need those keys for API authorization.
 
     Knawat suppliers npm package: [![npm version](https://badge.fury.io/js/%40knawat%2Fsuppliers.svg)](https://badge.fury.io/js/%40knawat%2Fsuppliers).
@@ -52,44 +52,23 @@ info:
       | -------- | -------- | -------- |
       | Un-processable entity     | 422     | The server understands the content type of the request entity, and the syntax of the request entity is correct, but was unable to process the contained instructions. |
 tags:
-  - name: Inventory management
+  - name: Inventory Management
     description: Updating your inventory, add products, check inventory levels.
-  - name: Order management
-    description: >-
+  - name: Order Management
+    description: |-
       Get orders, and update shipping status
-
       ## Order Cancellation
-
       Channels can cancel their orders before Knawat starts the international shipping process.
-
       ## Order Return
-
       We have to cases two return orders to suppliers:
-
       1. In case of supplier send a wrong or broken item.
-
-      2. In case the channel canceled the order before shipping it outside
-      Turkey.
-
-      Suppliers need to pick the items again from Knawat warehouse next
-      working day, while they are delivering next day items, we also can ship
-      it directly to your warehouse.
-
+      2. In case the channel canceled the order before shipping it outside Turkey.
+      Suppliers need to pick the items again from Knawat warehouse next working day, while they are delivering next day items, we also can ship it directly to your warehouse.
       ## Reservations
-
-      Knawat allows channels to reserve qty for maximum three working days
-      until they confirm orders with their customer. Knawat maintains orders
-      status according to the following table:
-
+      Knawat allows channels to reserve qty for maximum three working days until they confirm orders with their customer. Knawat maintains orders status according to the following table:
       ## Statuses
-
-      | Status | What? |
-      | -------- | -------- |
-      | reserved | PO created, not confirmed yet, supplier need to book the qty |
-      | sent | PO orders, need to ship |
-      | purchase | PO delivered by the supplier, integrator need to change status to purchase |
-      | done | PO paid to supplier |
-      | canceled | PO canceled |
+      | Status | What? | | -------- | -------- | | reserved | PO created, not confirmed yet, supplier need to book the qty | | sent | PO orders, need to ship | | purchase | PO delivered by the supplier, integrator need to change status to purchase | | done | PO paid to supplier | | canceled | PO canceled |
+  - name: Suppliers
 paths:
   /token:
     post:
@@ -256,7 +235,7 @@ paths:
                         type: string
                     address:
                       type: object
-                      description:
+                      description: >-
                         [
                           {
                             "line1": "Halaskargazi Mahallesi, D10 KAT5",
@@ -264,12 +243,11 @@ paths:
                             "post_code": "34371",
                             "city": "sisli",
                             "state": "ISTANBUL",
-                            "country": "TURKEY",
+                            "country": "TR",
                           },
-                        ]
                     contacts:
                       type: array
-                      description:
+                      description: >-
                         [
                           {
                             "department": "operations",
@@ -333,7 +311,7 @@ paths:
     put:
       summary: Update a supplier
       tags:
-        - suppliers
+        - Suppliers
       description: With this API you can change state from disabled to approved
       parameters:
         - name: Authorization
@@ -400,8 +378,6 @@ paths:
         required: true
     delete:
       summary: Disable a supplier
-      tags:
-        - suppliers
       description: >-
         Knawat will not delete the supplier, we only disable his subscription
         and remove all his products from all sales channels.
@@ -460,6 +436,8 @@ paths:
           $ref: "#/components/responses/UnauthorizedErrorBasic"
       security:
         - basicAuth: []
+      tags:
+        - Suppliers
     parameters:
       - name: id
         in: path
@@ -507,7 +485,7 @@ paths:
     get:
       summary: Get list of products
       tags:
-        - Inventory management
+        - Inventory Management
       description: >-
         Supplier can get all his products in our database.
 
@@ -613,7 +591,7 @@ paths:
     post:
       summary: Send new product(s)
       tags:
-        - Inventory management
+        - Inventory Management
       description: You can send one or more products
       parameters:
         - name: Authorization
@@ -650,7 +628,7 @@ paths:
     put:
       summary: Update Products
       tags:
-        - Inventory management
+        - Inventory Management
       description: >-
         Batch update products by SKU, you should send** Variants, attributes,
         url, Qualified status**. you can update one or more products, just send
@@ -690,7 +668,7 @@ paths:
     get:
       summary: Get product by SKU
       tags:
-        - Inventory management
+        - Inventory Management
       parameters:
         - name: Authorization
           in: header
@@ -718,7 +696,7 @@ paths:
     put:
       summary: Update product by SKU
       tags:
-        - Inventory management
+        - Inventory Management
       description: "Update Variants, attributes, url, description, archive status, images"
       responses:
         "200":
@@ -748,7 +726,7 @@ paths:
     get:
       summary: get all categories
       tags:
-        - Inventory management
+        - Inventory Management
       parameters:
         - name: parentId
           in: query
@@ -793,7 +771,7 @@ paths:
     get:
       summary: Get all orders
       tags:
-        - Order management
+        - Order Management
       description: >-
         Knawat creating orders to suppliers in daily bases, here all orders will
         be listed.
@@ -827,7 +805,7 @@ paths:
     get:
       summary: Get order by id
       tags:
-        - Order management
+        - Order Management
       parameters:
         - name: Authorization
           in: header
@@ -857,7 +835,7 @@ paths:
     put:
       summary: Update order
       tags:
-        - Order management
+        - Order Management
       description: >-
         Suppliers can send message or shipping info in case order in processing
         phase.
@@ -1053,7 +1031,7 @@ components:
                 "post_code": "34371",
                 "city": "ŞIŞLI",
                 "state": "İSTANBUL",
-                "country": "TURKEY",
+                "country": "TR",
               },
             ],
           "contacts":
