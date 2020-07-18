@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Knawat API Documentation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/png" href="favicon.png" />
+
+    <style>
+      body {
+        margin: 0;
+        padding-top: 80px;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 100;
+      }
+
+      #links_container {
+        margin: 0;
+        padding: 0;
+        background-color: #ef6530;
+      }
+
+      #links_container li {
+        display: inline-block;
+        padding: 10px;
+        color: white;
+        cursor: pointer;
+      }
+
+      #links_container li a {
+        text-decoration: none;
+        color: white;
+      }
+    </style>
+    
+  </head>
+  <body>
+    <!-- Top navigation placeholder -->
+    <nav>
+      <ul id="links_container">
+        <li>
+          <a href="https://developer.knawat.com" class="sc-iELTvK cCiYxb"
+            ><img
+              src="https://knawat.com/wp-content/uploads/2017/12/logo.png"
+              alt="logo"
+          /></a>
+        </li>
+        <li><a href="/">MP</a></li>
+        <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi.json">Suppliers</a></li>
+      </ul>
+    </nav>
+
+    <redoc></redoc>
+
+    <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
+    <script>
+      function getUrlParameter(name) {
+        name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+        var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
+        var results = regex.exec(location.search);
+        return results === null
+          ? "https://dev.mp.knawat.io/openapi/openapi.json"
+          : decodeURIComponent(results[1].replace(/\+/g, " "));
+      }
+      Redoc.init(getUrlParameter("url"), {
+        theme: { colors: { primary: { main: "#ef6530" } } },
+        scrollYOffset: 45
+      });
+    </script>
+  </body>
+</html>
