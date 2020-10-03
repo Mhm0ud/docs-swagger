@@ -8,19 +8,17 @@
     <style>
       body {
         margin: 0;
-        padding-top: 80px;
       }
-
       nav {
         position: fixed;
         top: 0;
         width: 100%;
         z-index: 100;
+        margin-left: 260px;
       }
 
       #links_container {
         margin: 0;
-        padding: 0;
         background-color: #ef6530;
       }
 
@@ -53,13 +51,6 @@
     <!-- Top navigation placeholder -->
     <nav>
       <ul id="links_container">
-        <li>
-          <a href="https://developer.knawat.com" class="sc-iELTvK cCiYxb"
-            ><img
-              src="https://knawat.com/wp-content/uploads/2017/12/logo.png"
-              alt="logo"
-          /></a>
-        </li>
         <li><a href="/">MP</a></li>
         <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi.json">Suppliers</a></li>
         <li><a href="/?url=https://dev.s.apps.knawat.io/openapi/openapi.json">New Store Integration</a></li>
@@ -80,8 +71,7 @@
           : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
       Redoc.init(getUrlParameter("url"), {
-        theme: { colors: { primary: { main: "#ef6530" } } },
-        scrollYOffset: 45
+        theme: { colors: { primary: { main: "#ef6530" } } }
       });
     </script>
   </body>
