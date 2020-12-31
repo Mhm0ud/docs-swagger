@@ -33,6 +33,37 @@
         text-decoration: none;
         color: white;
       }
+
+      #spinner:not([hidden]) {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #spinner::after {
+        content: "";
+        width: 65px;
+        height: 65px;
+        border: 2px solid #f3f3f3;
+        border-top: 3px solid #ef6530;
+        border-radius: 100%;
+        will-change: transform;
+        animation: spin 0.5s infinite linear
+      }
+      #spinner:before {
+        content: 'Loading';
+        position: inherit;
+        margin-top: 5%;
+        color: #ef6530;
+        font-size: 1.50em;
+        font-weight: 400;
+        font-family: Montserrat, sans-serif;
+    }
     </style>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -53,27 +84,79 @@
       <ul id="links_container">
         <li><a href="/">Merchants</a></li>
         <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi-bearerAuth.json">Suppliers</a></li>
+        <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi.json">Suppliers Private</a></li>
         <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi-bearerFulfillmentAuth.json">Fulfillment</a></li>
         <li><a href="/?url=https://s.apps.knawat.io/openapi/openapi.json">New Merchants Integration</a></li>
+        <li><a href="/?url=https://s.apps.knawat.io/openapi/openapi-basicAuth.json">Private Merchants Integration</a></li>
         <li><a href="/?url=https://sea.apps.knawat.io/openapi/openapi.json">New Supplier Integration</a></li>
       </ul>
     </nav>
+    <!-- this will show our spinner -->
+    <div id="spinner"></div>
 
     <redoc></redoc>
 
     <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
     <script>
-      function getUrlParameter(name) {
+      const spinner = document.getElementById("spinner");
+      // On load
+      window.addEventListener('load', (event) => {
+        getUrlParameter('url');
+      });
+
+      /**
+      * Get Url Parameters
+      */
+      function getUrlParameter(name='url') {
+        var authorization = {};
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         var results = regex.exec(location.search);
-        return results === null
-          ? "https://mp.knawat.io/openapi/openapi.json"
-          : decodeURIComponent(results[1].replace(/\+/g, " "));
+        var url = results === null ? "https://mp.knawat.io/openapi/openapi.json" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      
+        // Get last segment from url
+        const secParam = url.split('-').length > 1 ? url.split('-')[1].replace('.json', '') : '';
+        
+        // If the url countains openapi.json or openapi-basicAuth.json show prompt for credentials
+        if (secParam === '' || secParam === 'basicAuth') {
+          var username = prompt("Username : ", "");
+          if (username) {
+            var password = prompt("Password : ", "");
+            if(password){
+              authorization = {'Authorization': 'Basic ' + btoa(`${username}:${password}`)};
+              loadOpenApi(url,authorization);
+            }
+          } else {
+            alert("Authentication required");
+            authorization = {};
+            loadOpenApi(url,authorization);
+          }
+        } else {
+          authorization = {};
+          loadOpenApi(url,authorization);
+        }
       }
-      Redoc.init(getUrlParameter("url"), {
-        theme: { colors: { primary: { main: "#ef6530" } } }
-      });
+
+      /**
+      * Load Openapi from URL
+      */
+      function loadOpenApi(url,authorization){
+        // Show loader
+        spinner.removeAttribute('hidden');
+        fetch(url,
+        {
+          method:'GET', 
+          headers: authorization
+        })
+        .then(res => res.json())
+        .then(spec => {
+          // Hide loader
+          spinner.setAttribute('hidden', '');
+          Redoc.init(spec, {
+            theme: { colors: { primary: { main: "#ef6530" } } }
+          });
+        });
+      }
     </script>
   </body>
 </html>
