@@ -33,119 +33,76 @@
         text-decoration: none;
         color: white;
       }
-
-      #spinner:not([hidden]) {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #spinner::after {
-        content: "";
-        width: 65px;
-        height: 65px;
-        border: 2px solid #f3f3f3;
-        border-top: 3px solid #ef6530;
-        border-radius: 100%;
-        will-change: transform;
-        animation: spin 0.5s infinite linear
-      }
-      #spinner:before {
-        content: 'Loading';
-        position: inherit;
-        margin-top: 5%;
-        color: #ef6530;
-        font-size: 1.50em;
-        font-weight: 400;
-        font-family: Montserrat, sans-serif;
-    }
     </style>
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-W55F348');</script>
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({
+          "gtm.start": new Date().getTime(),
+          event: "gtm.js",
+        });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-W55F348");
+    </script>
     <!-- End Google Tag Manager -->
   </head>
+
   <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-W55F348"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-W55F348"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- Top navigation placeholder -->
     <nav>
       <ul id="links_container">
-        <li><a href="?url=https://s.apps.knawat.io/openapi/openapi-private.json">Merchents</a></li>
-        <li><a href="?url=https://dev.suppliers.knawat.io/openapi/openapi-basicAuth.json">Suppliers</a></li>
+        <li>
+          <a href="?url=https://dev.mp.knawat.io/openapi/openapi-private.json"
+            >Merchants</a
+          >
+        </li>
+        <li>
+          <a
+            href="?url=https://dev.suppliers.knawat.io/openapi/openapi-basicAuth.json"
+            >Suppliers</a
+          >
+        </li>
       </ul>
     </nav>
-    <!-- this will show our spinner -->
-    <div id="spinner"></div>
 
     <redoc></redoc>
 
     <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
     <script>
-      const spinner = document.getElementById("spinner");
-      // On load
-      window.addEventListener('load', (event) => {
-        getUrlParameter('url');
-      });
+      function getUrlParameter(name) {
+        var username = prompt("Username : ", "");
+        var password = prompt("Password : ", "");
+        if (!username || !password) {
+          alert("Authentication required");
+          getUrlParameter();
+        }
 
-      /**
-      * Get Url Parameters
-      */
-      function getUrlParameter(name='url') {
-        var authorization = {};
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         var results = regex.exec(location.search);
-        var url = results === null ? "https://dev.suppliers.knawat.io/openapi/openapi-basicAuth.json" : decodeURIComponent(results[1].replace(/\+/g, " "));
-      
-        // Get last segment from url
-        const secParam = url.split('-').length > 1 ? url.split('-')[1].replace('.json', '') : '';
-        
-        var username = prompt("Username : ", "");
-        if (username) {
-          var password = prompt("Password : ", "");
-          if(password){
-            authorization = {'Authorization': 'Basic ' + btoa(`${username}:${password}`)};
-            loadOpenApi(url,authorization);
-          }
-        } else {
-          alert("Authentication required");
-          authorization = {};
-          loadOpenApi(url,authorization);
-        }
-        
+        return results === null
+          ? `https://${username}:${password}@dev.mp.knawat.io/openapi/openapi-private.json`
+          : decodeURIComponent(results[1].replace(/\+/g, " ")).replace('https://', `https://${username}:${password}@`);
       }
-
-      /**
-      * Load Openapi from URL
-      */
-      function loadOpenApi(url,authorization){
-        // Show loader
-        spinner.removeAttribute('hidden');
-        fetch(url,
-        {
-          method:'GET', 
-          headers: authorization
-        })
-        .then(res => res.json())
-        .then(spec => {
-          // Hide loader
-          spinner.setAttribute('hidden', '');
-          Redoc.init(spec, {
-            theme: { colors: { primary: { main: "#ef6530" } } }
-          });
-        });
-      }
+      Redoc.init(getUrlParameter("url"), {
+        theme: { colors: { primary: { main: "#ef6530" } } },
+      });
     </script>
   </body>
 </html>

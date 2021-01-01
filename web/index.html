@@ -33,37 +33,6 @@
         text-decoration: none;
         color: white;
       }
-
-      #spinner:not([hidden]) {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      #spinner::after {
-        content: "";
-        width: 65px;
-        height: 65px;
-        border: 2px solid #f3f3f3;
-        border-top: 3px solid #ef6530;
-        border-radius: 100%;
-        will-change: transform;
-        animation: spin 0.5s infinite linear
-      }
-      #spinner:before {
-        content: 'Loading';
-        position: inherit;
-        margin-top: 5%;
-        color: #ef6530;
-        font-size: 1.50em;
-        font-weight: 400;
-        font-family: Montserrat, sans-serif;
-    }
     </style>
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -96,43 +65,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/redoc/bundles/redoc.standalone.js"></script>
     <script>
-      const spinner = document.getElementById("spinner");
-      // On load
-      window.addEventListener('load', (event) => {
-        getUrlParameter('url');
-      });
-
-      /**
-      * Get Url Parameters
-      */
-      function getUrlParameter(name='url') {
-        var authorization = {};
+      function getUrlParameter(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         var results = regex.exec(location.search);
-        var url = results === null ? "https://mp.knawat.io/openapi/openapi.json" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        loadOpenApi(url);
+        return results === null
+          ? "https://mp.knawat.io/openapi/openapi.json"
+          : decodeURIComponent(results[1].replace(/\+/g, " "));
       }
-
-      /**
-      * Load Openapi from URL
-      */
-      function loadOpenApi(url,authorization){
-        // Show loader
-        spinner.removeAttribute('hidden');
-        fetch(url,
-        {
-          method:'GET'
-        })
-        .then(res => res.json())
-        .then(spec => {
-          // Hide loader
-          spinner.setAttribute('hidden', '');
-          Redoc.init(spec, {
-            theme: { colors: { primary: { main: "#ef6530" } } }
-          });
-        });
-      }
+      Redoc.init(getUrlParameter("url"), {
+        theme: { colors: { primary: { main: "#ef6530" } } },
+      });
     </script>
   </body>
 </html>
