@@ -72,7 +72,6 @@
     'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
     })(window,document,'script','dataLayer','GTM-W55F348');</script>
     <!-- End Google Tag Manager -->
-    {{redocHead}}
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
@@ -82,11 +81,8 @@
     <!-- Top navigation placeholder -->
     <nav>
       <ul id="links_container">
-        <li><a href="/">Merchants</a></li>
-        <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi-bearerAuth.json">Suppliers</a></li>
-        <li><a href="/?url=https://dev.suppliers.knawat.io/openapi/openapi-bearerFulfillmentAuth.json">Fulfillment</a></li>
-        <li><a href="/?url=https://s.apps.knawat.io/openapi/openapi.json">New Merchants Integration</a></li>
-        <li><a href="/?url=https://sea.apps.knawat.io/openapi/openapi.json">New Supplier Integration</a></li>
+        <li><a href="?url=https://s.apps.knawat.io/openapi/openapi-private.json">Merchents</a></li>
+        <li><a href="?url=https://dev.suppliers.knawat.io/openapi/openapi-basicAuth.json">Suppliers</a></li>
       </ul>
     </nav>
     <!-- this will show our spinner -->
@@ -110,8 +106,24 @@
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)");
         var results = regex.exec(location.search);
-        var url = results === null ? "https://mp.knawat.io/openapi/openapi.json" : decodeURIComponent(results[1].replace(/\+/g, " "));
-        loadOpenApi(url);
+        var url = results === null ? "https://dev.suppliers.knawat.io/openapi/openapi-basicAuth.json" : decodeURIComponent(results[1].replace(/\+/g, " "));
+      
+        // Get last segment from url
+        const secParam = url.split('-').length > 1 ? url.split('-')[1].replace('.json', '') : '';
+        
+        var username = prompt("Username : ", "");
+        if (username) {
+          var password = prompt("Password : ", "");
+          if(password){
+            authorization = {'Authorization': 'Basic ' + btoa(`${username}:${password}`)};
+            loadOpenApi(url,authorization);
+          }
+        } else {
+          alert("Authentication required");
+          authorization = {};
+          loadOpenApi(url,authorization);
+        }
+        
       }
 
       /**
@@ -122,7 +134,8 @@
         spinner.removeAttribute('hidden');
         fetch(url,
         {
-          method:'GET'
+          method:'GET', 
+          headers: authorization
         })
         .then(res => res.json())
         .then(spec => {
