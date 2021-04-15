@@ -18,6 +18,7 @@ jobs:
         node-version: 12.x
     - name: npm install, build, and deploy
       run: |
+        git config --global user.name "Mhm0ud"
         npm ci
         npm run build
         npm run gh-pages
