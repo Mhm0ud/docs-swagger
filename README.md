@@ -8,7 +8,7 @@ Welcome to the Knawat API Documentation repository on GitHub. Here you can brows
 If you are not a developer, please use the [Knawat features page](https://knawat.com/features/) on Knawat.com.
 
 ## Reporting Security Issues
-To disclose a security issue to our team, [please submit a report here](https://knawat.com/contact/).
+To  disclose a security issue to our team, [please submit a report here](https://knawat.com/contact/).
 
 ## Support & Chat
 Developers are welcome here, please create issue or [chat with us https://gitter.im/Knawat/Lobby](https://gitter.im/Knawat/Lobby). This repository is not suitable for Knawat customers support. Please don't use our issue tracker for support requests, but for core Knawat issues only. Support can take place through [Knawat support portal](https://help.knaw at.com/hc/en-us/requests/new/) which is available for free.
