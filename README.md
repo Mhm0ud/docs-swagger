@@ -18,7 +18,7 @@ Support requests in issues on this repository will be closed on sight.
 ## Contributing to Knawat
 If you have a patch or have stumbled upon an issue with Knawat API core documentation, you can contribute this back. Please create a pull request. You can also join the [chat](https://gitter.im/Knawat/Lobby) and our developers will help you.
 
-## Check also
+## Check alsoo
 * [WooCommerce Dropshipping Plugin](https://github.com/Knawat/dropshipping-woocommerce)
 * [Magento 2 Module](https://github.com/Knawat/knawat-dropshipping-magento2)
 * [OpenCart Module](https://github.com/Knawat/knawat-dropshipping-opencart)
